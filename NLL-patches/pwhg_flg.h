@@ -51,7 +51,7 @@ CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 C
 C DQ flags
 C
-     2     flg_newsuda,flg_remnant
+     2     flg_newsuda,flg_remnant,
 C
 C End DQ flags
 C
@@ -74,7 +74,7 @@ C
 C
 C DQ flags
 C
-     4     flg_newsuda,flg_remnant
+     4     flg_newsuda,flg_remnant,
 C
 C End DQ flags
 C
