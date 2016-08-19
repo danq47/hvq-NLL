@@ -1,19 +1,26 @@
 #-*- Makefile -*-
+# Choose operating system
+theOS=$(shell uname -s)
 ## Choose compiler: gfortran,ifort
 COMPILER=gfortran
 ## Choose PDF: native,lhapdf
 ## LHAPDF package has to be installed separately
-PDF=lhapdf
+PDF=native
 #Choose Analysis: none, B-or-D, top
 ## default analysis may require FASTJET package, that has to be installed separately (see below)
-ANALYSIS=dummy
+#ANALYSIS=new
+ANALYSIS=final
 #ANALYSIS=B-or-D
 ## For static linking uncomment the following
 #STATIC= -static
 #
 ifeq ("$(COMPILER)","gfortran")	
-OBJ=obj-ifort
-F77= gfortran -fno-automatic 	
+OBJ=obj-gfortran
+ifeq ("$(theOS)","Linux")
+F77=gfortran -fno-automatic -ffixed-line-length-132
+else
+F77=gfortran -fno-automatic -ffixed-line-length-132 -fno-align-commons
+endif
 ## -fbounds-check sometimes causes a weird error due to non-lazy evaluation
 ## of boolean in gfortran.
 #FFLAGS= -Wall -Wimplicit-interface -fbounds-check
@@ -83,9 +90,27 @@ else
 ifeq ("$(ANALYSIS)","top")
 PWHGANAL=pwhg_analysis-top.o 
 else
+ifeq ("$(ANALYSIS)","final")
+FASTJET_CONFIG=$(shell which fastjet-config)
+ifeq ("$(theOS)","Linux")
+LIBSFASTJET += $(shell $(FASTJET_CONFIG) --libs --plugins ) -lstdc++
+else
+LIBSFASTJET += $(shell $(FASTJET_CONFIG) --libs --plugins --rpath=no) -lstdc++ -lc++
+endif
+FJCXXFLAGS+= $(shell $(FASTJET_CONFIG) --cxxflags)
+PWHGANAL=pwhg_analysis-final.o  fastjetfortran.o
+else
 PWHGANAL=pwhg_analysis-dummy.o
 endif
 endif
+endif
+
+# PYTHIA 8
+
+PYTHIA8LOCATION=/Users/Dan/code/pythia8185
+FJCXXFLAGS+=-I$(PYTHIA8LOCATION)/include -I$(PYTHIA8LOCATION)/include/Pythia8
+LIBPYTHIA8=-L$(PYTHIA8LOCATION)/lib/archive -lpythia8  -lstdc++ 
+
 
 %.o: %.f $(INCLUDE)
 	$(FF) -c -o $(OBJ)/$@ $<
@@ -105,7 +130,7 @@ PWHG=pwhg_main.o pwhg_init.o bbinit.o btilde.o lhefwrite.o		\
 	gen_index.o gen_radiation.o Bornzerodamp.o sigremnants.o	\
 	random.o boostrot.o bra_ket_subroutines.o cernroutines.o	\
 	init_phys.o powheginput.o pdfcalls.o sigreal.o sigcollremn.o	\
-	pwhg_bookhist.o pwhg_analysis_driver.o checkmomzero.o		\
+	pwhg_bookhist-multi.o pwhg_analysis_driver.o checkmomzero.o		\
 	setstrongcoupl.o integrator.o newunit.o mwarn.o sigsoftvirt.o	\
 	sigcollsoft.o sigvirtual.o reshufflemoms.o  setlocalscales.o    \
         validflav.o mint_upb.o  pwhgreweight.o opencount.o              \
@@ -116,34 +141,44 @@ pwhg_main:$(PWHG)
 	$(FF) $(patsubst %,$(OBJ)/%,$(PWHG)) $(LIBS) $(LIBSFASTJET) $(STATIC) -o $@
 
 LHEF=lhef_analysis.o boostrot.o random.o cernroutines.o		\
-     opencount.o powheginput.o pwhg_bookhist.o $(PWHGANAL)	\
+     opencount.o powheginput.o pwhg_bookhist-multi.o $(PWHGANAL)	\
      lhefread.o newunit.o pwhg_analysis_driver.o $(FPEOBJ)
+
 
 # target to analyze LHEF output
 lhef_analysis:$(LHEF)
 	$(FF) $(patsubst %,$(OBJ)/%,$(LHEF)) $(LIBS) $(LIBSFASTJET) $(STATIC)  -o $@ 
 
 
-
 # target to read event file, shower events with HERWIG + analysis
 HERWIG=main-HERWIG.o setup-HERWIG-lhef.o herwig.o powheginput.o\
-	pwhg_bookhist.o $(PWHGANAL) lhefread.o opencount.o pdfdummies.o $(FPEOBJ)
+	pwhg_bookhist-multi.o $(PWHGANAL) lhefread.o opencount.o pdfdummies.o $(FPEOBJ)
 
 main-HERWIG-lhef: $(HERWIG)
 	$(FF) $(patsubst %,$(OBJ)/%,$(HERWIG))  $(LIBSFASTJET)  $(STATIC) -o $@
 
 # target to read event file, shower events with PYTHIA + analysis
 PYTHIA=main-PYTHIA.o setup-PYTHIA-lhef.o pythia.o boostrot.o powheginput.o \
-	pwhg_bookhist.o $(PWHGANAL) lhefread.o newunit.o pdfdummies.o		\
+	pwhg_bookhist-multi.o $(PWHGANAL) lhefread.o newunit.o pdfdummies.o		\
 	pwhg_analysis_driver.o random.o cernroutines.o opencount.o	\
 	$(FPEOBJ)
 
 main-PYTHIA-lhef: $(PYTHIA)
 	$(FF) $(patsubst %,$(OBJ)/%,$(PYTHIA)) $(LIBSFASTJET)  $(STATIC) -o $@
 
+# target to read event file, shower events with PYTHIA8 + analysis
+PYTHIA8=main-PYTHIA8.o pythia8F77.o boostrot.o powheginput.o \
+	pwhg_bookhist-multi.o $(PWHGANAL) opencount.o lhefread.o newunit.o \
+	pdfdummies.o pwhg_analysis_driver.o \
+	random.o cernroutines.o bra_ket_subroutines.o \
+	$(FPEOBJ)
+
+main-PYTHIA8-lhef: $(PYTHIA8)
+	$(FF) $(patsubst %,$(OBJ)/%,$(PYTHIA8)) $(LIBSFASTJET) $(LIBPYTHIA8) $(STATIC) $(LIBS) -o $@
+
 # target to cleanup
 .PHONY: clean
 clean:
 	rm -f $(OBJ)/*.o pwhg_main lhef_analysis main-HERWIG-lhef	\
-	main-PYTHIA-lhef
+	main-PYTHIA-lhef main-PYTHIA8-lhef
 

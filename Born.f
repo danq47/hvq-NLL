@@ -4,6 +4,8 @@
       include 'pwhg_math.h'
       include 'pwhg_st.h'
       include 'pwhg_kn.h'
+      include 'pwhg_flg.h'
+      include 'pwhg_rad.h'
       integer nlegs
       parameter (nlegs=nlegborn)
       real * 8 p(0:3,nlegs),bornjk(nlegs,nlegs)
@@ -15,6 +17,7 @@
       parameter(b=(n**2-4)/(4*n))
 C     Abbreviation of (4.*pi*st_alpha)**2
       real*8 gs4,xxx,yyy,xm2,p12,p13,p23,s,t1,t2,ro
+      real * 8 t,u
       real * 8 gtens(0:3,0:3)
       data gtens/1d0, 0d0, 0d0, 0d0,
      #           0d0,-1d0, 0d0, 0d0,
@@ -34,7 +37,18 @@ C     Abbreviation of (4.*pi*st_alpha)**2
 
       gs4=(4*pi*st_alpha)**2
 
+
+c t=(p1-p3)^2 - m2 = p1^2 -2p1*p3 + p3^2 - m2 = -2p1*p3 + m2 - m2
+c u=(p1-p4)^2 - m2 = p1^2 -2p1*p4 + p4^2 - m2 = -2p1*p4
+          t=-2*p13
+          u=-2*p23
+          ggbornplanar1=(u/(t*(s**2))*(t**2 + u**2) + 4*(xm2/s)*(u/t) - 4*(xm2**2/t**2))
+          ggbornplanar2=(t/(u*(s**2))*(u**2 + t**2) + 4*(xm2/s)*(t/u) - 4*(xm2**2/u**2))
+          rhoweight=ggbornplanar1/(ggbornplanar1+ggbornplanar2)
+
+
       if(bflav(1).eq.0.and.bflav(2).eq.0) then
+
 c gluon fusion
 c the following expression equals the amplitude squared, summed
 c and averaged over spins and colours. It is equal to h^(0)_gg
@@ -147,19 +161,34 @@ c kinematics defined in the Les Houches interface
       include 'nlegborn.h'
       include 'pwhg_flst.h'
       include 'pwhg_kn.h'
+      include 'pwhg_flg.h'
+      include 'pwhg_rad.h'
       integer iclabel
       common/ciclabel/iclabel
       real * 8 random
       external random
       iclabel=500
-      if(idup(1).eq.21) then
-c gg
-         if(random().gt.0.5d0) then
-            call clinkqgga
-     1           (icolup(1,3),icolup(1,1),icolup(1,2),icolup(1,4))
-         else
-            call clinkqgga
-     1           (icolup(1,3),icolup(1,2),icolup(1,1),icolup(1,4))
+      if(idup(1).eq.21) then ! gg
+        	if(flg_newsuda.and.(.not.flg_remnant)) then 
+! Attach colour correctly according to rho if we are
+! using the new Sudakov and event is not a remnant
+         	if(rho_idx.eq.1) then
+            	call clinkqgga
+     1         	  (icolup(1,3),icolup(1,1),icolup(1,2),icolup(1,4))
+         	elseif(rho_idx.eq.2) then
+            	call clinkqgga
+     1         	  (icolup(1,3),icolup(1,2),icolup(1,1),icolup(1,4))
+         	endif	
+         else 
+! If using Old Sudakov (or remnant event), attach colour 
+! in the same way as before
+         	if(random().gt.0.5d0) then
+            	call clinkqgga
+     1         	  (icolup(1,3),icolup(1,1),icolup(1,2),icolup(1,4))
+         	else
+            	call clinkqgga
+     1         	  (icolup(1,3),icolup(1,2),icolup(1,1),icolup(1,4))
+         	endif	
          endif
       elseif(idup(1).gt.0) then
          call clinkqa(icolup(1,3),icolup(1,1))
@@ -185,6 +214,8 @@ c     1 and 2 are incoming! conjugate color
       subroutine realcolour_lh
       implicit none
       include 'LesHouches.h'
+      include 'nlegborn.h'
+      include 'pwhg_rad.h'
       character * 2 genprc
       integer jflreal
       integer igluon
@@ -213,25 +244,30 @@ c     1 and 2 are incoming! conjugate color
          call ggplanar(pup(1,1),1,pup(1,2),1,pup(1,5),1,
      1        pup(1,3),pup(1,4),xm2,
      2        t512,t152,t125,t521,t251,t215)
-         ichoice=ipick(t512,t152,t125,t521,t251,t215)
-         if(ichoice.eq.1) then
-            call clinkqggga(icolup(1,3),icolup(1,5),
+         if(rho_idx.eq.1) then
+            ichoice=ipick(t512,t152,t125,0.,0.,0.)
+            if(ichoice.eq.1) then
+               call clinkqggga(icolup(1,3),icolup(1,5),
      1           icolup(1,1),icolup(1,2),icolup(1,4))
-         elseif(ichoice.eq.2) then
-            call clinkqggga(icolup(1,3),icolup(1,1),
+            elseif(ichoice.eq.2) then
+               call clinkqggga(icolup(1,3),icolup(1,1),
      1           icolup(1,5),icolup(1,2),icolup(1,4))
-         elseif(ichoice.eq.3) then
-            call clinkqggga(icolup(1,3),icolup(1,1),
+            elseif(ichoice.eq.3) then
+               call clinkqggga(icolup(1,3),icolup(1,1),
      1           icolup(1,2),icolup(1,5),icolup(1,4))
-         elseif(ichoice.eq.4) then
-            call clinkqggga(icolup(1,3),icolup(1,5),
+            endif
+         elseif(rho_idx.eq.2) then
+            ichoice=ipick(0.,0.,0.,t512,t251,t215)
+            if(ichoice.eq.4) then
+               call clinkqggga(icolup(1,3),icolup(1,5),
      1           icolup(1,2),icolup(1,1),icolup(1,4))
-         elseif(ichoice.eq.5) then
-            call clinkqggga(icolup(1,3),icolup(1,2),
+            elseif(ichoice.eq.5) then
+               call clinkqggga(icolup(1,3),icolup(1,2),
      1           icolup(1,5),icolup(1,1),icolup(1,4))
-         elseif(ichoice.eq.6) then
-            call clinkqggga(icolup(1,3),icolup(1,2),
+            elseif(ichoice.eq.6) then
+               call clinkqggga(icolup(1,3),icolup(1,2),
      1           icolup(1,1),icolup(1,5),icolup(1,4))
+            endif
          endif
 c     1 and 2 are incoming
          call conjcolor(icolup(1,1))

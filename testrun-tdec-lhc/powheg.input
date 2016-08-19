@@ -1,4 +1,5 @@
-!randomseed 352345 ! uncomment to set the random seed to a value of your choice.
+newsuda 1 ! 1 for new Sudakov, 0 for old
+iseed 1
                    ! It generates the call RM48IN(352345,0,0) (see the RM48 manual).
                    ! THIS MAY ONLY AFFECTS THE GENERATION OF POWHEG EVENTS!
                    ! If POWHEG is interfaced to a shower MC, refer to the shower MC
@@ -6,13 +7,13 @@
 
 !Heavy flavour production parameters
 
-numevts 500000   ! number of events to be generated
+numevts 10000   ! number of events to be generated
 ih1   1        ! hadron 1
 ih2   1        ! hadron 2
-#ndns1 131      ! pdf for hadron 1 (hvqpdf numbering)
-#ndns2 131      ! pdf for hadron 2
-lhans1  10050         ! pdf set for hadron 1 (LHA numbering)
-lhans2  10050         ! pdf set for hadron 2 (LHA numbering)	
+ndns1 131      ! pdf for hadron 1 (hvqpdf numbering)
+ndns2 131      ! pdf for hadron 2
+#lhans1  10050         ! pdf set for hadron 1 (LHA numbering)
+#lhans2  10050         ! pdf set for hadron 2 (LHA numbering)	
 ebeam1 7000    ! energy of beam 1
 ebeam2 7000    ! energy of beam 2
 qmass  172     ! mass of heavy quark in GeV
@@ -20,7 +21,7 @@ facscfact 1    ! factorization scale factor: mufact=muref*facscfact
 renscfact 1    ! renormalization scale factor: muren=muref*renscfact 
 #fixedscale 1    ! use ref. scale=qmass (default 0, use running scale)
 
-topdecaymode 20000   ! an integer of 5 digits that are either 0, or 2, representing in 
+topdecaymode 22222   ! an integer of 5 digits that are either 0, or 2, representing in 
                      ! the order the maximum number of the following particles(antiparticles)
                      ! in the final state: e  mu tau up charm
                      ! For example

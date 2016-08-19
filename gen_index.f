@@ -25,17 +25,19 @@
       enddo
 
 c Choosing a value for rho
-      if(rad_ubornidx.eq.1) then
-         if(random().lt.rhoweight) then
-            rho_idx=1
-            Bfact=rhoweight
-         else
-            rho_idx=2
-            Bfact=(1d0-rhoweight)
-         endif
-      else
-      	rho_idx=rad_ubornidx+1
-        	Bfact=1d0
+      if(flg_newsuda) then
+      	if(rad_ubornidx.eq.1) then
+         	if(random().lt.rhoweight) then
+            	rho_idx=1
+            	Bfact=rhoweight
+         	else
+            	rho_idx=2
+            	Bfact=(1d0-rhoweight)
+         	endif
+      	else
+      		rho_idx=rad_ubornidx+1
+        		Bfact=1d0
+        	endif
       endif
       
    	end

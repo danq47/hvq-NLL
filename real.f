@@ -5,12 +5,15 @@
       include 'pwhg_math.h'
       include 'pwhg_st.h'
       include 'pwhg_kn.h'
+      include 'pwhg_flg.h'
+      include 'pwhg_rad.h'
       real * 8 p(0:3,nlegreal),amp2
       integer rflav(nlegreal)
       character * 2 prc
       common/process/prc
-      real * 8 s,q1q,xm2,tk,uk,q2q,w1h,w2h,x,y,cth2
-      integer ifl
+      real * 8 s,q1q,xm2,tk,uk,q2q,w1h,w2h,x,y,cth2,p_pup(0:4,nlegreal)
+      REAL * 8 t125,t152,t512,t215,t251,t521,ttot
+      integer ifl,ixx
       real * 8 dotp,fppx
       external dotp,fppx
 c compute mnr invariants
@@ -27,9 +30,34 @@ c     w1=-q1+q2-tk, w2=q1-q2-uk, w1(w2) = w1h(w2h) *s*(1-x)/2
       y=(tk-uk)/(s*(1-x))
 c     cth2 is not used by fgg,fqg,fqq, unless we are very near the collinear limit
       cth2=0
+c     Need to redefine momenta to use the ggplanar function
+      if(flg_newsuda) then
+      	do ixx=1,5
+            p_pup(0,ixx)=p(1,ixx)      !px
+            p_pup(1,ixx)=p(2,ixx)      !py
+            p_pup(2,ixx)=p(3,ixx)      !pz
+            p_pup(3,ixx)=p(0,ixx)      !E
+            p_pup(4,ixx)=sqrt(p(0,ixx)**2 - p(1,ixx)**2 - p(2,ixx)**2 - p(3,ixx)**2 )   !m
+         enddo
+      endif
+
       if(rflav(1).eq.0.and.rflav(2).eq.0) then
          prc='gg'
          ifl=0
+c        Calculating the planar amplitude weightings like FNO (4.52) 
+c        rhorweight(rho_r) = R^{\alpha_r = gg, rho_r}/R^{\alpha_r=gg,1..6}
+         if(flg_newsuda) then
+            call ggplanar(p_pup(:,1),1,p_pup(:,2),1,p_pup(:,5),1,
+     1            p_pup(:,3),p_pup(:,4),xm2,
+     2            t512,t152,t125,t521,t251,t215)           
+            ttot=t512+t152+t125+t521+t251+t215
+            rhorweight(1)=t512/ttot
+            rhorweight(2)=t152/ttot
+            rhorweight(3)=t125/ttot
+            rhorweight(4)=t521/ttot
+            rhorweight(5)=t251/ttot
+            rhorweight(6)=t215/ttot
+         endif
       elseif(rflav(1).gt.0.and.rflav(2).lt.0) then
          prc='qq'
          ifl=1
