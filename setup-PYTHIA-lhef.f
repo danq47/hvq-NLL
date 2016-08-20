@@ -43,7 +43,7 @@ c      mstp(71)=0                !No FS shower
 c      mstp(91)=0                !No Primordial kt
 c      mstp(131)=0               !No Pile Up
 c     Doesn't work with hadronisation for some reason
-      mstp(111)=0               !No hadronization
+C       mstp(111)=0               !No hadronization
 
 c     Change lambda in alfa running.
 c     Keep all commented to let PYTHIA do its default

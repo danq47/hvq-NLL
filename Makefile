@@ -9,7 +9,7 @@ PDF=lhapdf
 #Choose Analysis: none, B-or-D, top
 ## default analysis may require FASTJET package, that has to be installed separately (see below)
 #ANALYSIS=new
-ANALYSIS=final
+ANALYSIS=ttbar
 #ANALYSIS=B-or-D
 ## For static linking uncomment the following
 #STATIC= -static
@@ -103,6 +103,19 @@ else
 PWHGANAL=pwhg_analysis-dummy.o
 endif
 endif
+endif
+
+ifeq ("$(ANALYSIS)","ttbar")
+	PWHGANAL=pwhg_analysis-ttbar.o fastjetfortran.o
+	FJCXXFLAGS+= $(shell $(FASTJET_CONFIG) --cxxflags)
+	FASTJET_CONFIG=$(shell which fastjet-config)
+
+	ifeq ("$(theOS)","Linux")
+		LIBSFASTJET += $(shell $(FASTJET_CONFIG) --libs --plugins ) -lstdc++
+	else
+		LIBSFASTJET += $(shell $(FASTJET_CONFIG) --libs --plugins --rpath=no) -lstdc++ -lc++
+	endif
+	
 endif
 
 # PYTHIA 8
