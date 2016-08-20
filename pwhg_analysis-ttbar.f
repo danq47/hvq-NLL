@@ -43,9 +43,9 @@ c Analysis subroutine
       include 'nlegborn.h'
       include 'pwhg_rad.h'
       include 'pwhg_weights.h'   ! KH added 17/8/16
-      character * 6 whcprg      
+      character * 7 whcprg      
       common/cwhcprg/whcprg
-		data whcprg/'NLO   '/
+		data whcprg/'NLO    '/
       real * 8  dsig0            ! KH added 17/8/16
       real * 8  dsig(7)          ! KH added 17/8/16
       integer   nweights         ! KH added 17/8/16
@@ -64,14 +64,14 @@ c particle properties
 C - KH - 17/8/16 - added block from here ...
       if (iniwgts) then
          write(*,*) '*********************'
-         if(whcprg.eq.'NLO') then
+         if(whcprg.eq.'NLO    ') then
             write(*,*) ' NLO ANALYSIS      '
             weights_num=0
-         elseif(WHCPRG.eq.'LHE   ') then
+         elseif(WHCPRG.eq.'LHE    ') then
             write(*,*) ' LHE ANALYSIS      '
-         elseif(WHCPRG.eq.'HERWIG') then
+         elseif(WHCPRG.eq.'HERWIG ') then
             write(*,*) ' HERWIG ANALYSIS   '
-         elseif(WHCPRG.eq.'PYTHIA') then
+         elseif(WHCPRG.eq.'PYTHIA ') then
             write(*,*) ' PYTHIA ANALYSIS   '
          elseif(WHCPRG.eq.'PYTHIA8') then
             write(*,*) ' PYTHIA8 ANALYSIS   '

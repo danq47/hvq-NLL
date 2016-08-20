@@ -2,7 +2,7 @@
       implicit none
       include 'LesHouches.h'
       include 'hepevt.h'
-      character * 6 WHCPRG
+      character * 7 WHCPRG
       common/cWHCPRG/WHCPRG
       integer j,k,l,m,iret,kloop,kpy8
       integer maxev
@@ -24,7 +24,7 @@
       logical weveto
       external powheginput
 
-      WHCPRG='PYTHIA'
+      WHCPRG='PYTHIA8'
 
       py8tune = powheginput("#py8tune")
       nohad = powheginput("#nohad")
