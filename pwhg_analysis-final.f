@@ -82,13 +82,19 @@ c  pwhgfill  :  fills the histograms with data
       include 'LesHouches.h'
       include 'nlegborn.h'
       include 'pwhg_rad.h'
+      include 'pwhg_weights.h'   ! KH added 17/8/16
       character * 6 whcprg      
       common/cwhcprg/whcprg
       integer jpref
       character * 20 prefix1,prefix2,prefix3
       common/ccccprefix/jpref
       data whcprg/'NLO   '/
-      real * 8  dsig0,dsig
+      real * 8  dsig0            ! KH added 17/8/16
+      real * 8  dsig(7)          ! KH added 17/8/16
+      integer   nweights         ! KH added 17/8/16
+      logical   iniwgts          ! KH added 17/8/16
+      data      iniwgts/.true./  ! KH added 17/8/16
+      save      iniwgts          ! KH added 17/8/16
       logical   ini
       data      ini/.true./
       save      ini
@@ -127,8 +133,36 @@ c  pwhgfill  :  fills the histograms with data
       ngenerations = powheginput("#ngenerations")
       if(ngenerations.lt.0) ngenerations = 4
 
-      dsig  = dsig0
+C - KH - 17/8/16 - added block from here ...
+      if (iniwgts) then
+         write(*,*) '*********************'
+         if(whcprg.eq.'NLO') then
+            write(*,*) ' NLO ANALYSIS      '
+            weights_num=0
+         elseif(WHCPRG.eq.'LHE   ') then
+            write(*,*) ' LHE ANALYSIS      '
+         elseif(WHCPRG.eq.'HERWIG') then
+            write(*,*) ' HERWIG ANALYSIS   '
+         elseif(WHCPRG.eq.'PYTHIA') then
+            write(*,*) ' PYTHIA ANALYSIS   '
+         endif
+         write(*,*) '*********************'
+         if(weights_num.eq.0) then
+            call setupmulti(1)
+         else
+            call setupmulti(weights_num)
+         endif
+         iniwgts=.false.
+      endif
 
+      dsig=0
+      if(weights_num.eq.0) then
+         dsig(1)=dsig0
+      else
+         dsig(1:weights_num)=weights_val(1:weights_num)
+      endif
+      if(sum(abs(dsig)).eq.0) return
+C - KH - 17/8/16 - down to here ; copied from DYNNLOPS's pwhg_analysis-minlo.f
 
       i_top = 0
       i_atop = 0
@@ -590,4 +624,46 @@ C --------------------------------------------------------------------- C
       sonofhep = .false.
       end
 
+
+! KH - 17/8/16 - added the routines below as they are being called by
+! the main-PYTHIA8.f code. They were added purely for this reason. I
+! have no clue as to the physics behind doing it. More importantly,
+! more generally, I have no idea what the main-PYTHIA8 and pythia8F77.cc
+! are doing. 
+      subroutine boost2reson4(pres,nm,pin,pout)
+      implicit none
+      integer nm
+      real * 8 pres(4),pin(4,nm),pout(4,nm)
+      real * 8 vec(3),beta
+      beta=sqrt(pres(1)**2+pres(2)**2+pres(3)**2)/pres(4)
+      vec(1)=pres(1)/(beta*pres(4))
+      vec(2)=pres(2)/(beta*pres(4))
+      vec(3)=pres(3)/(beta*pres(4))
+      call mboost4(nm,vec,-beta,pin,pout)
+      end
+
+
+      
+      subroutine mboost4(m,vec,beta,vin,vout)
+c     boosts the m vectors vin(4,m) into the vectors vout(4,m) (that can
+c     be the same) in the direction of vec(3) (|vec|=1) with velocity
+c     beta.  Lorents convention: (t,x,y,z).
+      implicit none
+      integer m
+      real * 8 vec(3),beta,vin(4,m),vout(4,m)
+      real * 8 betav,gamma
+      real * 8 vdotb
+      integer ipart,idim
+      gamma=1/sqrt(1-beta**2)
+      do ipart=1,m
+         vdotb=vin(1,ipart)*vec(1)
+     #         +vin(2,ipart)*vec(2)+vin(3,ipart)*vec(3)
+         do idim=1,3
+            vout(idim,ipart)=vin(idim,ipart)
+     #           +vec(idim)*((gamma-1)*vdotb
+     #           +gamma*beta*vin(4,ipart))
+         enddo
+         vout(4,ipart)=gamma*(vin(4,ipart)+vdotb*beta)
+      enddo
+      end
 

@@ -5,7 +5,7 @@ theOS=$(shell uname -s)
 COMPILER=gfortran
 ## Choose PDF: native,lhapdf
 ## LHAPDF package has to be installed separately
-PDF=native
+PDF=lhapdf
 #Choose Analysis: none, B-or-D, top
 ## default analysis may require FASTJET package, that has to be installed separately (see below)
 #ANALYSIS=new
@@ -108,8 +108,8 @@ endif
 # PYTHIA 8
 
 PYTHIA8LOCATION=/Users/Dan/code/pythia8185
-FJCXXFLAGS+=-I$(PYTHIA8LOCATION)/include -I$(PYTHIA8LOCATION)/include/Pythia8
-LIBPYTHIA8=-L$(PYTHIA8LOCATION)/lib/archive -lpythia8  -lstdc++ 
+FJCXXFLAGS+=-I$(PYTHIA8LOCATION)/include -I$(PYTHIA8LOCATION)/include/Pythia8 -I$(PYTHIA8LOCATION)/include/Pythia8Plugins
+LIBPYTHIA8=-L$(PYTHIA8LOCATION)/lib/archive -lpythia8  -lstdc++  #-llhapdfdummy
 
 
 %.o: %.f $(INCLUDE)
