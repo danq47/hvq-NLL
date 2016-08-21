@@ -126,7 +126,7 @@ extern "C" {
     pythia.readString("5122:mayDecay = off"); 
 
 
-    pythia.readString("HadronLevel:All = off");
+    // pythia.readString("HadronLevel:All = off");
 
     
     pythia.setUserHooksPtr(MyHook); 
