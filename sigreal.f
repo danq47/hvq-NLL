@@ -678,11 +678,11 @@ c End initialization phase; compute graphs
       enddo
       call pdfcall(1,kn_x1,pdf1)
       call pdfcall(2,kn_x2,pdf2)
-      if(flg_withdamp) then
+C       if(flg_withdamp) then
          call collrad(rc)
          call collsoftrad(rcs)
          call softrad(rs)
-      endif
+C       endif
       do alr=1,flst_nalr
          computed(alr)=.false.
       enddo
@@ -724,6 +724,12 @@ c            if(equivto(alr).lt.0.or..not.computed(equivto(alr))) then
                endif
                flst_cur_alr = alr
                call realgr(flst_alr(1,alr),kn_cmpreal,rr(alr))
+! Check if the radiation is collinear
+               if(abs((rr(alr)-rc(alr))/rr(alr)).lt.0.1) then
+                  coll_check = 1
+               else
+               	coll_check = 0
+               endif               
                sumdijinv=0
                do k=1,flst_allreg(1,0,alr)
                   sumdijinv=sumdijinv
