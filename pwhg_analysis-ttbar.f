@@ -14,58 +14,74 @@ c Initialise histograms
 
 		call inihists
 
+      do i = 1,4
+      	if(i.eq.1) then
+      		prefix1 = '-incl'
+      	elseif(i.eq.2) then
+      		prefix1 = '-str'
+      	elseif(i.eq.3) then
+      		prefix1 = '-unstr'
+C          elseif(i.eq.4) then
+C             prefix1 = '-vstr'
+C          elseif(i.eq.5) then
+C             prefix1 = '-vunstr'
+C          elseif(i.eq.6) then
+C       		prefix1 = '-qqb'
+      	else
+      		prefix1 = '-gg'
+      	endif
 c (1.) Observables of the (i) top, (ii) t~, (iii) tt~ system
 c (iv-vii) 1-4th hardest jets.
 
-      do j=1,6
-         if(j.eq.1) then
-            prefix1='t'
-         elseif(j.eq.2) then
-            prefix1='ttbar'
-         elseif(j.eq.3) then
-            prefix1='j1'
-         elseif(j.eq.4) then
-         	prefix1='j2'
-        	elseif(j.eq.5) then
-         	prefix1='j3'
-        	elseif(j.eq.6) then
-         	prefix1='j4'
-         endif
-         l1=lenocc(prefix1)
-         call bookupeqbins(prefix1(1:l1)//'_y'  ,0.08d0,-8d0,8d0)
-         call bookupeqbins(prefix1(1:l1)//'_eta',0.08d0,-8d0,8d0)
-         if(j.le.2) then
-         	call bookupeqbins(prefix1(1:l1)//'_pt_2GeV',2d0,0d0,500d0)
-         	call bookupeqbins(prefix1(1:l1)//'_pt_5GeV',5d0,0d0,500d0)
-         	call bookupeqbins(prefix1(1:l1)//'_pt_10GeV',10d0,0d0,1000d0)
-         	call bookupeqbins(prefix1(1:l1)//'_pt_50GeV',50d0,0d0,1000d0)
-         elseif(j.eq.3) then
-         	call bookupeqbins(prefix1(1:l1)//'_pt_2GeV',10d0,0d0,500d0)
-         	call bookupeqbins(prefix1(1:l1)//'_pt_5GeV',10d0,0d0,500d0)
-         	call bookupeqbins(prefix1(1:l1)//'_pt_10GeV',10d0,0d0,1000d0)
-         	call bookupeqbins(prefix1(1:l1)//'_pt_50GeV',50d0,0d0,1000d0)
-         else
-         	call bookupeqbins(prefix1(1:l1)//'_pt_2GeV',2d0,0d0,250d0)
-         endif
-         if(j.le.2) then
-         	call bookupeqbins(prefix1(1:l1)//'_mass',5d0,150d0,750d0)
-        	else
-        		call bookupeqbins(prefix1(1:l1)//'_mass',5d0,0d0,350d0)
-        	endif
-      enddo
+      	do j=1,6
+	         if(j.eq.1) then
+	            prefix2='t'
+	         elseif(j.eq.2) then
+	            prefix2='ttbar'
+	         elseif(j.eq.3) then
+	            prefix2='j1'
+	         elseif(j.eq.4) then
+	         	prefix2='j2'
+	        	elseif(j.eq.5) then
+	         	prefix2='j3'
+	        	elseif(j.eq.6) then
+	         	prefix2='j4'
+	         endif
+
+	         l1=lenocc(prefix1)
+	         l2=lenocc(prefix2)
+
+	         call bookupeqbins(prefix2(1:l2)//'_y'//prefix1(1:l1),0.08d0,-8d0,8d0)
+	         call bookupeqbins(prefix2(1:l2)//'_eta'//prefix1(1:l1),0.08d0,-8d0,8d0)
+	         if(j.le.2) then
+	         	call bookupeqbins(prefix2(1:l2)//'_pt_2GeV'//prefix1(1:l1),2d0,0d0,500d0)
+!	         	call bookupeqbins(prefix2(1:l2)//'_pt_5GeV'//prefix1(1:l1),5d0,0d0,500d0)
+!	         	call bookupeqbins(prefix2(1:l2)//'_pt_10GeV'//prefix1(1:l1),10d0,0d0,1000d0)
+!	         	call bookupeqbins(prefix2(1:l2)//'_pt_50GeV'//prefix1(1:l1),50d0,0d0,1000d0)
+	         elseif(j.eq.3) then
+	         	call bookupeqbins(prefix2(1:l2)//'_pt_2GeV'//prefix1(1:l1),2d0,10d0,500d0)
+!	         	call bookupeqbins(prefix2(1:l2)//'_pt_5GeV'//prefix1(1:l1),5d0,10d0,500d0)
+	         	call bookupeqbins(prefix2(1:l2)//'_pt_10GeV'//prefix1(1:l1),10d0,10d0,1500d0)
+!	         	call bookupeqbins(prefix2(1:l2)//'_pt_50GeV'//prefix1(1:l1),50d0,50d0,1000d0)
+	         else
+	         	call bookupeqbins(prefix2(1:l2)//'_pt_2GeV'//prefix1(1:l1),2d0,0d0,250d0)
+	         endif
+	         if(j.le.2) then
+	         	call bookupeqbins(prefix2(1:l2)//'_mass'//prefix1(1:l1),5d0,150d0,750d0)
+	        	else
+	        		call bookupeqbins(prefix2(1:l2)//'_mass'//prefix1(1:l1),5d0,0d0,350d0)
+	        	endif
+	      enddo
 
 c (2.) Rapidities in the y_ttbar=0 frame
-      call bookupeqbins('yj1_minus_yttb',0.08d0,-8d0,8d0)
-      call bookupeqbins('yj2_minus_yttb',0.08d0,-8d0,8d0)
-      call bookupeqbins('yj3_minus_yttb',0.08d0,-8d0,8d0)
+	      call bookupeqbins('yj1_minus_yttb'//prefix1(1:l1),0.08d0,-8d0,8d0)
+	      call bookupeqbins('yj2_minus_yttb'//prefix1(1:l1),0.08d0,-8d0,8d0)
+	      call bookupeqbins('yj3_minus_yttb'//prefix1(1:l1),0.08d0,-8d0,8d0)
 c      call bookupeqbins('yj4_minus_yttb',0.08d0,-8d0,8d0)
 
-c (3.) recoil of the jet off the ttbar system. In LHEF, this should be zero 
-c by definition - except when we have a jet with pT<pT_min^{fastjet}
-      call bookupeqbins('pt_j1_minus_pt_ttbar',1d0,-100d0,100d0)
+c (3.) Gap fraction - NOT DONE YET
 
-c (4.) Gap fraction - NOT DONE YET
-
+	   enddo
 		end
 
 c Analysis subroutine
@@ -98,7 +114,7 @@ c particle momenta
 		real * 8  p_top(4),p_tb(4),p_b(4),p_bb(4),p_hist(4)
 c particle observables
 		real * 8  y,eta,pt,mass,mttbar,yttbar,ptttbar,
-     1          ptbhadfromtop,ptbhadfromatop
+     1          ptbhadfromtop,ptbhadfromatop,y_t,y_tb,deltay
 c Fastjet stuff
 		integer   maxtracks,maxjets
 		parameter (maxtracks=nmxhep,maxjets=20)
@@ -112,6 +128,7 @@ c Jet observables
 		real * 8 j_phi(maxjets),j_p(4,maxjets)
 c names for the histograms
 		character * 20 prefix1,prefix2,prefix3
+		logical condition1,condition2,condition3
 		integer l1,l2,l3
 		integer lenocc
 		external lenocc
@@ -272,65 +289,113 @@ c Find the hardest jets that are not b jets
       	endif				! jet_position(n) now contains
       enddo					! the n-th hardest non-b jet
 
+c calculate kinematic quantities needed for stretched/unstretched spectra
+      call getyetaptmass(p_top,y,eta,pt,mass)
+      y_t=y
+      call getyetaptmass(p_tb,y,eta,pt,mass)
+      y_tb=y
+      deltay = y_t - y_tb
 c Fill histograms - make the cuts
 
-      do kxx=1,6
+      do ixx = 1,3
 
-      	p_hist=0
+      	condition1 = .false.
 
-         if(kxx.eq.1) then
-            prefix1 = 't'
-            p_hist = p_top
-         elseif(kxx.eq.2) then
-            prefix1 = 'ttbar'
-            p_hist = p_top + p_tb
-         elseif(kxx.eq.3) then
-         	prefix1 = 'j1'
-          	p_hist = j_p(1:4,jet_position(1))
-         elseif(kxx.eq.4) then
-         	prefix1 = 'j2'
-         	p_hist = j_p(1:4,jet_position(2))
-         elseif(kxx.eq.5) then
-         	prefix1 = 'j3'
-         	p_hist = j_p(1:4,jet_position(3))
-         elseif(kxx.eq.6) then
-         	prefix1 = 'j4'
-         	p_hist = j_p(1:4,jet_position(4))
-         endif
+      	if(ixx.eq.1) then
+      		prefix1='-incl'
+      		condition1 = .true.
+        	elseif(ixx.eq.2) then
+      		prefix1='-str'
+            if((rho.eq.1.and.deltay.lt.0).or.(rho.eq.2.and.deltay.gt.0)) then
+      			condition1 = .true.
+      		endif
+      	elseif(ixx.eq.3) then
+      		prefix1='-unstr'
+            if((rho.eq.1.and.deltay.gt.0).or.(rho.eq.2.and.deltay.lt.0)) then
+      			condition1 = .true.
+      		endif
+C       	elseif(ixx.eq.4) then
+C             prefix1='-vstr'
+C             if((rho.eq.1.and.deltay.lt.-2).or.(rho.eq.2.and.deltay.gt.2)) then
+C                condition1 = .true.
+C             endif
+C          elseif(ixx.eq.5) then
+C             prefix1='-vunstr'
+C             if((rho.eq.1.and.deltay.gt.-2).or.(rho.eq.2.and.deltay.lt.2)) then
+C                condition1 = .true.
+C             endif
+C          elseif(ixx.eq.6) then
+C       		prefix1='-qqb'
+C       		if(rho.gt.2) then
+C       			condition1 = .true.
+C       		endif
+      	else
+      		prefix1='-gg'
+      	endif      
 
-         l1=lenocc(prefix1)
+      	do jxx=1,6	
 
-         call getyetaptmass(p_hist,y,eta,pt,mass)
-         if(kxx.eq.2) then
-         	mttbar=mass
-         	yttbar=y
-         	ptttbar=pt
-         endif
-         call filld(prefix1(1:l1)//'_y',y,dsig)
-         call filld(prefix1(1:l1)//'_eta',eta,dsig)
-         call filld(prefix1(1:l1)//'_pt_2GeV',pt,dsig)
-         if(kxx.le.3) then
-         	call filld(prefix1(1:l1)//'_pt_5GeV',pt,dsig)
-         	call filld(prefix1(1:l1)//'_pt_10GeV',pt,dsig)
-         	call filld(prefix1(1:l1)//'_pt_50GeV',pt,dsig)
-         endif
-         call filld(prefix1(1:l1)//'_mass',mass,dsig)
+	      	p_hist=0	
+	      	condition2 = .false.
 
-      enddo
+	         if(jxx.eq.1) then
+	            prefix2 = 't'
+	            p_hist = p_top
+	            condition2 = .true.
+	         elseif(jxx.eq.2) then
+	            prefix2 = 'ttbar'
+	            p_hist = p_top + p_tb
+	            condition2 = .true.
+	         elseif(jxx.eq.3) then
+	         	prefix2 = 'j1'
+	          	p_hist = j_p(1:4,jet_position(1))
+	            condition2 = .true.
+	         elseif(jxx.eq.4) then
+	         	prefix2 = 'j2'
+	         	p_hist = j_p(1:4,jet_position(2))
+	            condition2 = .true.
+	         elseif(jxx.eq.5) then
+	         	prefix2 = 'j3'
+	         	p_hist = j_p(1:4,jet_position(3))
+	            condition2 = .true.
+	         elseif(jxx.eq.6) then
+	         	prefix2 = 'j4'
+	         	p_hist = j_p(1:4,jet_position(4))
+	            condition2 = .true.
+	         endif	
+
+	         l1=lenocc(prefix1)
+	         l2=lenocc(prefix2)	
+
+	         if(condition1.and.condition2) then
+		         call getyetaptmass(p_hist,y,eta,pt,mass)
+		         if(jxx.eq.2) then
+	   	      	mttbar=mass
+	      	   	yttbar=y
+	         		ptttbar=pt
+	         	endif
+		         call filld(prefix2(1:l2)//'_y'//prefix1(1:l1),y,dsig)
+		         call filld(prefix2(1:l2)//'_eta'//prefix1(1:l1),eta,dsig)
+	   	      call filld(prefix2(1:l2)//'_pt_2GeV'//prefix1(1:l1),pt,dsig)
+	      	   if(jxx.eq.3) then
+	         		call filld(prefix2(1:l2)//'_pt_10GeV'//prefix1(1:l1),pt,dsig)
+	         	endif
+	         	call filld(prefix2(1:l2)//'_mass'//prefix1(1:l1),mass,dsig)	
+	         endif
 c jet rapidities in the centre of mass frame
-      do ixx=1,3
-      	if(ixx.eq.1) prefix2='1'
-      	if(ixx.eq.2) prefix2='2'
-      	if(ixx.eq.3) prefix2='3'
-      	if(j_kt(jet_position(ixx)).gt.0) then
-      		call filld('yj'//prefix2(1:1)//'_minus_yttb',
-     1      j_rap(jet_position(ixx)) - yttbar,dsig)
-      	endif
-      enddo
-
-		call filld('pt_j1_minus_pt_ttbar',j_kt(jet_position(1))-ptttbar,dsig)
-
-
+	         if(jxx.eq.1) then
+		      	do j=1,3
+		     			if(j.eq.1) prefix3='1'
+	   	  			if(j.eq.2) prefix3='2'
+	     				if(j.eq.3) prefix3='3'
+	     				if(j_kt(jet_position(j)).gt.0) then
+	     					call filld('yj'//prefix3(1:1)//'_minus_yttb'//prefix1(1:l1),
+     1         		j_rap(jet_position(j)) - yttbar,dsig)
+	      			endif
+	      		enddo	
+	      	endif
+	      enddo	
+		enddo
 		end
 
       subroutine getyetaptmass(p,y,eta,pt,mass)
