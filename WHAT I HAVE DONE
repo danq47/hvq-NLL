@@ -12,6 +12,8 @@ the desktop. Therefore I've got 2 options, either write an analysis on the compu
 that works, or comment out anything that uses boost2reson4, write it on my 
 laptop, and then see if it works on the computer.
 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 22.Aug
 
 (1) Have got the two codes to compile, and can do some analyses.
@@ -30,3 +32,19 @@ the code is correctly identifying the b jets. Getting the code to output
 the n hardest jets and then identifying when they are b-jets, I would have
 assumed the b jets to have a similar pT to the bare b quarks, however, this
 is not always the case, I will have to look into this further.
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+22.Aug - 2
+
+(1) Have made the B hadrons stable in Pythia6, and now we get similar
+results (i.e. bJet pT) between pythia 6 and 8
+
+(2) I have changed how the code chooses the b jets. 
+Before it was looking at what jet vector the last b was in, however,
+now I have changed it to find the hardest b hadron, and then whatever
+jet that is in is the b jet. This gives results consistent with the
+behaviour I would have expected in (3) above
+
+(3) Have also updated the analysis file to include a lot more observables

@@ -89,21 +89,41 @@ c read the header first, so lprup is set
 c     Make PI0 stable as in herwig default
       mdcy(pycomp(111),1)=0
 
-      if(lprup(1).eq.1004) then
-c make D+ and D- stable (using PDG codes)
-         mdcy(pycomp(411),1)=0
-         mdcy(pycomp(-411),1)=0
-c make D0 and D0bar stable
-         mdcy(pycomp(421),1)=0
-         mdcy(pycomp(-421),1)=0
-      elseif(lprup(1).eq.1005) then
+C       if(lprup(1).eq.1004) then
+C c make D+ and D- stable (using PDG codes)
+C          mdcy(pycomp(411),1)=0
+C          mdcy(pycomp(-411),1)=0
+C c make D0 and D0bar stable
+C          mdcy(pycomp(421),1)=0
+C          mdcy(pycomp(-421),1)=0
+C       elseif(lprup(1).eq.1005) then
 c make B+ and B- stable
          mdcy(pycomp(521),1)=0
          mdcy(pycomp(-521),1)=0
 c make B0 and B0bar stable
          mdcy(pycomp(511),1)=0
          mdcy(pycomp(-511),1)=0
-      endif
+c Added to be the same as the pythia8 code:
+         mdcy(pycomp(521),1)=0
+         mdcy(pycomp(-521),1)=0
+         mdcy(pycomp(531),1)=0
+         mdcy(pycomp(-531),1)=0
+         mdcy(pycomp(541),1)=0
+         mdcy(pycomp(-541),1)=0
+         mdcy(pycomp(553),1)=0
+         mdcy(pycomp(5222),1)=0
+         mdcy(pycomp(-5222),1)=0
+         mdcy(pycomp(5122),1)=0
+         mdcy(pycomp(-5122),1)=0
+         mdcy(pycomp(5112),1)=0
+         mdcy(pycomp(-5112),1)=0
+         mdcy(pycomp(5232),1)=0
+         mdcy(pycomp(-5232),1)=0
+         mdcy(pycomp(5332),1)=0
+         mdcy(pycomp(-5332),1)=0
+         mdcy(pycomp(5132),1)=0
+         mdcy(pycomp(-5132),1)=0
+C       endif
       end
 
       subroutine UPEVNT

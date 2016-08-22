@@ -7,7 +7,7 @@ c Initialise histograms
 		implicit none
 		include  'LesHouches.h'
 		include 'pwhg_math.h'
-		integer j,l1,l2,l3
+		integer i,j,k,l1,l2,l3
 		character * 20 prefix1,prefix2,prefix3 	! prefixes for naming the histograms
 		integer lenocc										! length of the character array
 		external lenocc									! containing the prefix
@@ -17,20 +17,55 @@ c Initialise histograms
 c (1.) Observables of the (i) top, (ii) t~, (iii) tt~ system
 c (iv-vii) 1-4th hardest jets.
 
-		do j=1,3
-			if(j.eq.1) then
-				prefix1='t'
-			elseif(j.eq.2) then
-				prefix1='tb'
-			elseif(j.eq.3) then
-				prefix1='ttbar'
-			endif
-			l1=lenocc(prefix1)
-			call bookupeqbins(prefix1(1:l1)//'_y'  ,0.04d0,-4d0,4d0)
-			call bookupeqbins(prefix1(1:l1)//'_eta',0.04d0,-4d0,4d0)
-			call bookupeqbins(prefix1(1:l1)//'_pt',2d0,0d0,500d0)
-			call bookupeqbins(prefix1(1:l1)//'_mass',5d0,150d0,750d0)
-		enddo
+      do j=1,6
+         if(j.eq.1) then
+            prefix1='t'
+         elseif(j.eq.2) then
+            prefix1='ttbar'
+         elseif(j.eq.3) then
+            prefix1='j1'
+         elseif(j.eq.4) then
+         	prefix1='j2'
+        	elseif(j.eq.5) then
+         	prefix1='j3'
+        	elseif(j.eq.6) then
+         	prefix1='j4'
+         endif
+         l1=lenocc(prefix1)
+         call bookupeqbins(prefix1(1:l1)//'_y'  ,0.08d0,-8d0,8d0)
+         call bookupeqbins(prefix1(1:l1)//'_eta',0.08d0,-8d0,8d0)
+         if(j.le.2) then
+         	call bookupeqbins(prefix1(1:l1)//'_pt_2GeV',2d0,0d0,500d0)
+         	call bookupeqbins(prefix1(1:l1)//'_pt_5GeV',5d0,0d0,500d0)
+         	call bookupeqbins(prefix1(1:l1)//'_pt_10GeV',10d0,0d0,1000d0)
+         	call bookupeqbins(prefix1(1:l1)//'_pt_50GeV',50d0,0d0,1000d0)
+         elseif(j.eq.3) then
+         	call bookupeqbins(prefix1(1:l1)//'_pt_2GeV',10d0,0d0,500d0)
+         	call bookupeqbins(prefix1(1:l1)//'_pt_5GeV',10d0,0d0,500d0)
+         	call bookupeqbins(prefix1(1:l1)//'_pt_10GeV',10d0,0d0,1000d0)
+         	call bookupeqbins(prefix1(1:l1)//'_pt_50GeV',50d0,0d0,1000d0)
+         else
+         	call bookupeqbins(prefix1(1:l1)//'_pt_2GeV',2d0,0d0,250d0)
+         endif
+         if(j.le.2) then
+         	call bookupeqbins(prefix1(1:l1)//'_mass',5d0,150d0,750d0)
+        	else
+        		call bookupeqbins(prefix1(1:l1)//'_mass',5d0,0d0,350d0)
+        	endif
+      enddo
+
+c (2.) Rapidities in the y_ttbar=0 frame
+      call bookupeqbins('yj1_minus_yttb',0.08d0,-8d0,8d0)
+      call bookupeqbins('yj2_minus_yttb',0.08d0,-8d0,8d0)
+      call bookupeqbins('yj3_minus_yttb',0.08d0,-8d0,8d0)
+c      call bookupeqbins('yj4_minus_yttb',0.08d0,-8d0,8d0)
+
+c (3.) recoil of the jet off the ttbar system. In LHEF, this should be zero 
+c by definition - except when we have a jet with pT<pT_min^{fastjet}
+      call bookupeqbins('pt_j1_minus_pt_ttbar',1d0,-100d0,100d0)
+
+c (4.) Gap fraction - NOT DONE YET
+
 		end
 
 c Analysis subroutine
@@ -41,48 +76,43 @@ c Analysis subroutine
 		include 'LesHouches.h'
 		include 'nlegborn.h'
 		include 'pwhg_rad.h'
-		include 'pwhg_weights.h'   ! KH added 17/8/16
+		include 'pwhg_weights.h'   	! KH added 17/8/16
 		character * 7 whcprg      
 		common/cwhcprg/whcprg
 		data whcprg/'NLO    '/
-		real * 8  dsig0            ! KH added 17/8/16
-		real * 8  dsig(7)          ! KH added 17/8/16
-		integer   nweights         ! KH added 17/8/16
-		logical   iniwgts          ! KH added 17/8/16
-		data      iniwgts/.true./  ! KH added 17/8/16
-		save      iniwgts          ! KH added 17/8/16
-		integer   ihep,jhep     	! HEPEVT index
+		real * 8  dsig0            	! KH added 17/8/16
+		real * 8  dsig(7)          	! KH added 17/8/16
+		integer   nweights         	! KH added 17/8/16
+		logical   iniwgts          	! KH added 17/8/16
+		data      iniwgts/.true./  	! KH added 17/8/16
+		save      iniwgts          	! KH added 17/8/16
+		integer   ihep,jhep     		! HEPEVT index
 		integer   id,id1,id2
-		integer   ixx,jxx,kxx,lxx,j 			! loop indices
+		integer   ixx,jxx,kxx,lxx,j 	! loop indices
 ! particle id numbers for identifying them in the event record
 		integer 	 i_top,i_atop,i_bfromtop,i_abfromatop
 		integer	 i_bjet,i_abjet
-C 	  1 			 	i_bjet,i_abjet,tmp(10),jet_position(10),i_j3,i_j4
 		integer 	 bhadfromtop,bhadfromatop
+		integer   jet_position(10),tmp(10)
 c particle momenta
-		real * 8  p_top(4),p_tb(4),p_b(4),p_bb(4),ptbhadfromtop,ptbhadfromatop
+		real * 8  p_top(4),p_tb(4),p_b(4),p_bb(4),p_hist(4)
 c particle observables
-		real * 8  y,eta,pt,mass,mttbar,yttbar,ptttbar,ptt,pttb
+		real * 8  y,eta,pt,mass,mttbar,yttbar,ptttbar,
+     1          ptbhadfromtop,ptbhadfromatop
 c Fastjet stuff
 		integer   maxtracks,maxjets
 		parameter (maxtracks=nmxhep,maxjets=20)
-		integer mjets,jetvec(maxtracks)
-		integer in_jet,ngenerations
-		external in_jet
-C       logical sonofid
-		integer sonofid,binhadron
-		external sonofid,binhadron,isbhadron
+		integer mjets,jetvec(maxtracks),in_jet,
+     1        ngenerations,sonofid,binhadron
 		logical   isForClustering(maxtracks),isbhadron
+		external sonofid,binhadron,isbhadron,in_jet
 		common/cngenerations/ngenerations
 c Jet observables
 		real * 8 j_kt(maxjets),j_eta(maxjets),j_rap(maxjets)
 		real * 8 j_phi(maxjets),j_p(4,maxjets)
-C c conditions for analysis
-C       logical condition1,condition2,condition3
 c names for the histograms
 		character * 20 prefix1,prefix2,prefix3
 		integer l1,l2,l3
-		real*8  p_hist(4),x
 		integer lenocc
 		external lenocc
 
@@ -121,18 +151,19 @@ C - KH - 17/8/16 - added block from here ...
 		if(sum(abs(dsig)).eq.0) return
 C - KH - 17/8/16 - down to here ; copied from DYNNLOPS's pwhg_analysis-minlo.f
 
+c Initialise all numbers as 0
 		i_top=0
 		i_atop=0
 		i_bfromtop=0
 		i_abfromatop=0
 		i_bjet=0
 		i_abjet=0
-		bhadfromtop=0
-		bhadfromatop=0
 		IsForClustering = .false.
+		jet_position(1:10) = 0
+		tmp(1:10) = 0
 
-c Find the particles from the event record
-
+c Find the tops (and the bs that they decay into) 
+c from the event record
 		do jhep=1,nhep
 			id=idhep(jhep)
 			if(idhep(jhep).eq.6) i_top = jhep 		! find t
@@ -142,8 +173,6 @@ c Find the particles from the event record
 				if(min(sonofid(6,jhep),sonofid(-6,jhep)).lt.1d5) then
 					if(idhep(jhep).eq.5) i_bfromtop = jhep			! b
 					if(idhep(jhep).eq.-5) i_abfromatop = jhep		! b~
-! 					if(idhep(jhep).eq.24) i_wp = jhep
-! 					if(idhep(jhep).eq.-24) i_wm = jhep
 				endif
 			endif
 c for jets, using only final state particles excluding leptons
@@ -154,38 +183,18 @@ c for jets, using only final state particles excluding leptons
          endif
       enddo
 
-      id1=idhep(1)
-      id2=idhep(2)
-      if(id1.eq.21) id1=0
-      if(id2.eq.21) id2=0
-
-      p_top=phep(1:4,i_top)
-      call getyetaptmass(p_top,y,eta,pt,mass)
-      ptt=pt
-      p_tb=phep(1:4,i_atop)
-      call getyetaptmass(p_tb,y,eta,pt,mass)
-      pttb=pt
-      if(i_bfromtop.ne.0) p_b=phep(1:4,i_bfromtop)
-      if(i_abfromatop.ne.0) p_bb=phep(1:4,i_abfromatop)
-
 c Call Fastjet to build jets
       mjets = maxjets
       call buildjets(mjets,j_kt,j_eta,j_rap,j_phi,j_p,jetvec,
      1     isForClustering)
 
-
-      i_bjet = in_jet(i_bfromtop,jetvec) 		! Which jets come from the bs
-      i_abjet = in_jet(i_abfromatop,jetvec)
-
-
-
+c Find the b hadrons
      	bhadfromtop = 0
       bhadfromatop = 0
       ptbhadfromtop = 0
       ptbhadfromatop = 0
+c copied from ttb_NLO_dec
       do j=1,nhep
-C       	if(isbhadron(idhep(j))) write(*,*) j
-      	if(isbhadron(idhep(j))) write(*,*) j
          if(IsForClustering(j).and.isbhadron(idhep(j))) then
             if(binhadron(idhep(j)).eq.5) then ! is it a b or b~?
 ! Look for hardest (largest pt) hadron with a b quark content.
@@ -220,18 +229,106 @@ c                  write(*,*) ' a top with more than one b son'
          endif
       enddo
 
-      write(*,*) 'b from top:',i_bfromtop,', b~ from t~:',i_abfromatop
-      write(*,*) 'b hadron:',bhadfromtop,', b~ hadron:',bhadfromatop
-      call getyetaptmass(p_b,y,eta,pt,mass)
-      write(23,*) 'pt b:',pt,',pt b hadron:',ptbhadfromtop
-      call getyetaptmass(p_bb,y,eta,pt,mass)
-      write(23,*) 'pt b~:',pt,',pt b~ hadron:',ptbhadfromatop
+c Figure out which jets came from the b's i.e. which contain b hadrons
+      i_bjet = in_jet(bhadfromtop,jetvec)
+      i_abjet = in_jet(bhadfromatop,jetvec)
 
+C       do ixx=1,10
+C       	if(j_kt(ixx).gt.0) then
+C       		if(i_bjet.eq.ixx) write(23,*) j_kt(ixx),'b jet'
+C       		if(i_abjet.eq.ixx) write(23,*) j_kt(ixx),'b~ jet'
+C       		if(i_bjet.ne.ixx.and.i_abjet.ne.ixx) write(23,*) j_kt(ixx)
+C       	endif
+C       enddo
+C       write(23,*)
 
+      id1=idhep(1)
+      id2=idhep(2)
+      if(id1.eq.21) id1=0
+      if(id2.eq.21) id2=0
 
+      p_top=phep(1:4,i_top)
+      p_tb=phep(1:4,i_atop)
+      p_b=phep(1:4,i_bfromtop)
+      p_bb=phep(1:4,i_abfromatop)
 
+c Find the hardest jets that are not b jets
+      do ixx=1,6
+      	tmp(ixx)=ixx 			! temporary array
+      	jet_position(ixx)=0
+      	if(i_bjet.eq.ixx.or.i_abjet.eq.ixx) then
+      		tmp(ixx)=0			! delete the position of the b jets
+      	endif
+      enddo
 
+      jxx=0 						
+      do ixx=1,4					
+ 100		continue
+      	if(tmp(ixx+jxx).ne.0) then
+      		jet_position(ixx)=ixx+jxx
+      	else
+      		jxx=jxx+1
+      		goto 100
+      	endif				! jet_position(n) now contains
+      enddo					! the n-th hardest non-b jet
 
+c Fill histograms - make the cuts
+
+      do kxx=1,6
+
+      	p_hist=0
+
+         if(kxx.eq.1) then
+            prefix1 = 't'
+            p_hist = p_top
+         elseif(kxx.eq.2) then
+            prefix1 = 'ttbar'
+            p_hist = p_top + p_tb
+         elseif(kxx.eq.3) then
+         	prefix1 = 'j1'
+          	p_hist = j_p(1:4,jet_position(1))
+         elseif(kxx.eq.4) then
+         	prefix1 = 'j2'
+         	p_hist = j_p(1:4,jet_position(2))
+         elseif(kxx.eq.5) then
+         	prefix1 = 'j3'
+         	p_hist = j_p(1:4,jet_position(3))
+         elseif(kxx.eq.6) then
+         	prefix1 = 'j4'
+         	p_hist = j_p(1:4,jet_position(4))
+         endif
+
+         l1=lenocc(prefix1)
+
+         call getyetaptmass(p_hist,y,eta,pt,mass)
+         if(kxx.eq.2) then
+         	mttbar=mass
+         	yttbar=y
+         	ptttbar=pt
+         endif
+         call filld(prefix1(1:l1)//'_y',y,dsig)
+         call filld(prefix1(1:l1)//'_eta',eta,dsig)
+         call filld(prefix1(1:l1)//'_pt_2GeV',pt,dsig)
+         if(kxx.le.3) then
+         	call filld(prefix1(1:l1)//'_pt_5GeV',pt,dsig)
+         	call filld(prefix1(1:l1)//'_pt_10GeV',pt,dsig)
+         	call filld(prefix1(1:l1)//'_pt_50GeV',pt,dsig)
+         endif
+         call filld(prefix1(1:l1)//'_mass',mass,dsig)
+
+      enddo
+c jet rapidities in the centre of mass frame
+      do ixx=1,3
+      	if(ixx.eq.1) prefix2='1'
+      	if(ixx.eq.2) prefix2='2'
+      	if(ixx.eq.3) prefix2='3'
+      	if(j_kt(jet_position(ixx)).gt.0) then
+      		call filld('yj'//prefix2(1:1)//'_minus_yttb',
+     1      j_rap(jet_position(ixx)) - yttbar,dsig)
+      	endif
+      enddo
+
+		call filld('pt_j1_minus_pt_ttbar',j_kt(jet_position(1))-ptttbar,dsig)
 
 
 		end
