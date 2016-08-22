@@ -1,0 +1,32 @@
+WHAT I HAVE DONE
+
+(1) I've put everything into the one working directory (haven't actually
+done this for born_zeros yet but I will soon)
+
+(2) The Pythia6 code compiles, but doesn't work on my analysis.
+I need to redo the analysis, probably looking at the code from ttbar_NLO
+and maybe trijet for examples
+
+(3) For some reason Pythia8 won't even compile on my mac, but it does on
+the desktop. Therefore I've got 2 options, either write an analysis on the computer
+that works, or comment out anything that uses boost2reson4, write it on my 
+laptop, and then see if it works on the computer.
+
+22.Aug
+
+(1) Have got the two codes to compile, and can do some analyses.
+Have taken some of the code from ttb_NLO_dec to get it running,
+including boost2reson4 etc. Also, the subroutines are slightly different
+between this analysis and the top one from hvq, hvq is only set up to for
+semileptonically decaying tops where as the one in ttb_NLO_dec is for
+dileptonically decaying tops.
+
+(2) The analysis works for pythia8, however, in pythia6 the b mesons are 
+unstable and so it doesn't find the b jets correctly. Need to turn this off
+and see if we get similar results.
+
+(3) Comparing the lhef analysis with the pythia ones, it is not clear that
+the code is correctly identifying the b jets. Getting the code to output
+the n hardest jets and then identifying when they are b-jets, I would have
+assumed the b jets to have a similar pT to the bare b quarks, however, this
+is not always the case, I will have to look into this further.
