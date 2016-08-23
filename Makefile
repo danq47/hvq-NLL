@@ -119,8 +119,11 @@ ifeq ("$(ANALYSIS)","ttbar")
 endif
 
 # PYTHIA 8
-
+ifeq ("$(theOS)","Linux")
+PYTHIA8LOCATION=/unix/theory/quill/powheg-scripts-INSTALL/pythia8185
+else
 PYTHIA8LOCATION=/Users/Dan/code/pythia8185
+endif
 FJCXXFLAGS+=-I$(PYTHIA8LOCATION)/include -I$(PYTHIA8LOCATION)/include/Pythia8 -I$(PYTHIA8LOCATION)/include/Pythia8Plugins
 LIBPYTHIA8=-L$(PYTHIA8LOCATION)/lib/archive -lpythia8  -lstdc++  #-llhapdfdummy
 
