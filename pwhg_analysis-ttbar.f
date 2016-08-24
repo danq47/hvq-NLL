@@ -59,17 +59,19 @@ c (iv-vii) 1-4th hardest jets.
 !	         	call bookupeqbins(prefix2(1:l2)//'_pt_10GeV'//prefix1(1:l1),10d0,0d0,1000d0)
 !	         	call bookupeqbins(prefix2(1:l2)//'_pt_50GeV'//prefix1(1:l1),50d0,0d0,1000d0)
 	         elseif(j.eq.3) then
-	         	call bookupeqbins(prefix2(1:l2)//'_pt_2GeV'//prefix1(1:l1),2d0,10d0,500d0)
+	         	call bookupeqbins(prefix2(1:l2)//'_pt_2GeV'//prefix1(1:l1),2d0,0d0,500d0)
 !	         	call bookupeqbins(prefix2(1:l2)//'_pt_5GeV'//prefix1(1:l1),5d0,10d0,500d0)
-	         	call bookupeqbins(prefix2(1:l2)//'_pt_10GeV'//prefix1(1:l1),10d0,10d0,1500d0)
+	         	call bookupeqbins(prefix2(1:l2)//'_pt_10GeV'//prefix1(1:l1),10d0,0d0,1000d0)
 !	         	call bookupeqbins(prefix2(1:l2)//'_pt_50GeV'//prefix1(1:l1),50d0,50d0,1000d0)
 	         else
-	         	call bookupeqbins(prefix2(1:l2)//'_pt_2GeV'//prefix1(1:l1),2d0,0d0,250d0)
+	         	call bookupeqbins(prefix2(1:l2)//'_pt_2GeV'//prefix1(1:l1),1d0,0d0,100d0)
 	         endif
-	         if(j.le.2) then
-	         	call bookupeqbins(prefix2(1:l2)//'_mass'//prefix1(1:l1),5d0,150d0,750d0)
+	         if(j.eq.1) then
+	         	call bookupeqbins(prefix2(1:l2)//'_mass'//prefix1(1:l1),1d0,140d0,200d0)
+	         elseif(j.eq.2) then
+	         	call bookupeqbins(prefix2(1:l2)//'_mass'//prefix1(1:l1),4d0,200d0,1000d0)
 	        	else
-	        		call bookupeqbins(prefix2(1:l2)//'_mass'//prefix1(1:l1),5d0,0d0,350d0)
+	        		call bookupeqbins(prefix2(1:l2)//'_mass'//prefix1(1:l1),0.5d0,0d0,100d0)
 	        	endif
 	      enddo
 
@@ -298,7 +300,7 @@ c calculate kinematic quantities needed for stretched/unstretched spectra
       deltay = y_t - y_tb
 c Fill histograms - make the cuts
 
-      do ixx = 1,3
+      do ixx = 1,4
 
       	condition1 = .false.
 
@@ -381,7 +383,13 @@ C       		endif
 	      	   if(jxx.eq.3) then
 	         		call filld(prefix2(1:l2)//'_pt_10GeV'//prefix1(1:l1),pt,dsig)
 	         	endif
-	         	call filld(prefix2(1:l2)//'_mass'//prefix1(1:l1),mass,dsig)	
+	         	if(jxx.lt.3) then
+	         		call filld(prefix2(1:l2)//'_mass'//prefix1(1:l1),mass,dsig)
+	         	else
+	         		if(whcprg.ne.'LHE    ') then ! no point plotting mass for a gluon/jets that don't exist
+	         			call filld(prefix2(1:l2)//'_mass'//prefix1(1:l1),mass,dsig)
+	         		endif
+	         	endif
 	         endif
 c jet rapidities in the centre of mass frame
 	         if(jxx.eq.1) then
@@ -474,22 +482,28 @@ C       parameter (maxtracks=nmxhep,maxjets=nmxhep) ! <- think this is a mistake
       logical   isForClustering(maxtracks)
       real * 8  ptrack(4,maxtracks),pj(4,maxjets)
       integer   jetvec(maxtracks),itrackhep(maxtracks)
-      integer   ntracks,njets
-      integer   j,k,mu
+      integer   ntracks,njets,tmp1(maxtracks)
+      integer   j,k,mu,ixx
       real * 8  r,palg,ptmin,pp,tmp
       integer sonofid
       external sonofid
 C - Initialize arrays and counters for output jets
-      ptrack = 0
-      jetvec = 0
+C       ptrack = 0
+C       jetvec = 0
       ntracks=0
-      pj = 0
+C       pj = 0
       kt=0
       eta=0
       rap=0
       phi=0
       pjet=0
-      jetvechep=0
+      do ixx=1,maxtracks
+      	ptrack(:,ixx)=0
+      	jetvec(ixx)=0
+      	pj(:,ixx)=0
+      	jetvechep(ixx)=0
+      	tmp1(ixx)=0
+      enddo
 C - Extract final state particles to feed to jet finder
       do j=1,nhep
          if(.not.isForClustering(j)) cycle
@@ -518,13 +532,24 @@ C - f = 0.75  overlapping fraction
       mjets=min(mjets,njets)
       if(njets.eq.0) return
 c check consistency
-      do k=1,ntracks
-         if(jetvec(k).gt.0) then
+C       do k=1,ntracks
+C          if(jetvec(k).gt.0) then
+C             do mu=1,4
+C                pj(mu,jetvec(k))=pj(mu,jetvec(k))+ptrack(mu,k)
+C             enddo
+C          endif
+C       enddo
+      do ixx=1,size(jetvec)		! DQ - for some reason, once inside the k=1,ntracks loop
+      	tmp1(ixx)=jetvec(ixx)	! below, jetvec was giving wrong results, however, outside 
+      enddo								! the loop it was OK so I have just copied the items in 
+      do k=1,ntracks					! the array jetvec into tmp1 and used that inside the loop instead
+         if(tmp1(k).gt.0) then
             do mu=1,4
-               pj(mu,jetvec(k))=pj(mu,jetvec(k))+ptrack(mu,k)
+               pj(mu,tmp1(k))=pj(mu,tmp1(k))+ptrack(mu,k)
             enddo
          endif
       enddo
+
       tmp=0
       do j=1,mjets
          do mu=1,4
