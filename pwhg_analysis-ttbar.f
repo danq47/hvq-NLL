@@ -122,7 +122,7 @@ c Fastjet stuff
 		integer   maxtracks,maxjets
 		parameter (maxtracks=nmxhep,maxjets=20)
 		integer mjets,jetvec(maxtracks),in_jet,
-     1        ngenerations,sonofid,binhadron
+     1        ngenerations,ngen0,sonofid,binhadron
 		logical   isForClustering(maxtracks),isbhadron
 		external sonofid,binhadron,isbhadron,in_jet
 		common/cngenerations/ngenerations
@@ -136,7 +136,9 @@ c names for the histograms
 		integer lenocc
 		external lenocc
 
-		ngenerations = 4 	! parameter used in sonofhep
+		ngen0 = 0						! ngenerations is used in sonofhep to find which parton
+  10	continue							! the particle is descended from. If we don't find a bjet,
+		ngenerations = 4 + ngen0	! we come back here and search again, with more generations
 
 C - KH - 17/8/16 - added block from here ...
 		if (iniwgts) then
@@ -252,15 +254,10 @@ c                  write(*,*) ' a top with more than one b son'
 c Figure out which jets came from the b's i.e. which contain b hadrons
       i_bjet = in_jet(bhadfromtop,jetvec)
       i_abjet = in_jet(bhadfromatop,jetvec)
-
-C       do ixx=1,10
-C       	if(j_kt(ixx).gt.0) then
-C       		if(i_bjet.eq.ixx) write(23,*) j_kt(ixx),'b jet'
-C       		if(i_abjet.eq.ixx) write(23,*) j_kt(ixx),'b~ jet'
-C       		if(i_bjet.ne.ixx.and.i_abjet.ne.ixx) write(23,*) j_kt(ixx)
-C       	endif
-C       enddo
-C       write(23,*)
+      if(i_bjet.eq.0.or.i_abjet.eq.0) then ! go back to the beginning of the 
+      	ngen0=ngen0+1							  ! analysis and search again
+      	goto 10									  ! with an increased ngenerations
+      endif
 
       id1=idhep(1)
       id2=idhep(2)
@@ -291,6 +288,17 @@ c Find the hardest jets that are not b jets
       		goto 100
       	endif				! jet_position(n) now contains
       enddo					! the n-th hardest non-b jet
+
+C       do ixx=1,10
+C       	if(j_kt(ixx).gt.0) then
+C       		if(i_bjet.eq.ixx) write(23,*) j_kt(ixx),'b jet'
+C       		if(i_abjet.eq.ixx) write(23,*) j_kt(ixx),'b~ jet'
+C       		if(i_bjet.ne.ixx.and.i_abjet.ne.ixx) write(23,*) j_kt(ixx)
+C       	endif
+C       enddo
+C       write(23,*) 'b jet:',i_bjet
+C       write(23,*) 'b~ jet:',i_abjet
+C       write(23,*)
 
 c calculate kinematic quantities needed for stretched/unstretched spectra
       call getyetaptmass(p_top,y,eta,pt,mass)
@@ -334,6 +342,9 @@ C       			condition1 = .true.
 C       		endif
       	else
       		prefix1='-gg'
+      		if(rho.lt.3) then
+      			condition1 = .true.
+      		endif
       	endif      
 
       	do jxx=1,6	
@@ -488,10 +499,7 @@ C       parameter (maxtracks=nmxhep,maxjets=nmxhep) ! <- think this is a mistake
       integer sonofid
       external sonofid
 C - Initialize arrays and counters for output jets
-C       ptrack = 0
-C       jetvec = 0
       ntracks=0
-C       pj = 0
       kt=0
       eta=0
       rap=0
@@ -527,7 +535,7 @@ C - R = 0.7   radius parameter
 C - f = 0.75  overlapping fraction
       palg  = -1
       r     = 0.7d0
-      ptmin = 10d0
+      ptmin = 0d0
       call fastjetppgenkt(ptrack,ntracks,r,palg,ptmin,pjet,njets,jetvec)
       mjets=min(mjets,njets)
       if(njets.eq.0) return
@@ -571,7 +579,8 @@ C --------------------------------------------------------------------- C
       enddo
       jetvechep = 0
       do j=1,ntracks
-         jetvechep(itrackhep(j))=jetvec(j)
+C          jetvechep(itrackhep(j))=jetvec(j)
+      	jetvechep(itrackhep(j))=tmp1(j)	! same as above, just renaming the jetvec
       enddo
       end
 
