@@ -41,6 +41,12 @@ c Flag to see if we are to use the new Sudakov form factor or not
       else
          flg_newsuda=.false.
       endif
+c Flag to see if we use soft approximation of the planar matrix elements
+      if(powheginput('#rsoft').eq.1d0) then
+      	flg_rsoft = .true.
+      else
+      	flg_rsoft = .false.
+      endif
 
 c whether to save btilde calls to set up upper bounding envelope
       if(powheginput('#storemintupb').eq.1d0) then

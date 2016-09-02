@@ -921,9 +921,17 @@ c we multiply it by Rfact/Bfact i.e. the factor multiplying R^{alpha_r}/B^{f_b} 
                if(flg_newsuda) then
                	if(flst_alr(1,alr).eq.0.and.flst_alr(2,alr).eq.0) then ! gg
                		if(rho_idx.eq.1) then
-               			Rfact = rhorweight(1) + rhorweight(2) + rhorweight(3)
+               			if(.not.flg_rsoft) then
+               				Rfact = rhorweight(1) + rhorweight(2) + rhorweight(3)
+               			else
+               				Rfact = rsoft1/(rsoft1+rsoft2)
+               			endif
                		elseif(rho_idx.eq.2) then
-               			Rfact = rhorweight(4) + rhorweight(5) + rhorweight(6)
+               			if(.not.flg_rsoft) then
+	               			Rfact = rhorweight(4) + rhorweight(5) + rhorweight(6)
+	               		else
+	               			Rfact = rsoft2/(rsoft1+rsoft2)
+	               		endif
                		endif
 
                      rr(alr) = (Rfact/Bfact) * rr(alr)
