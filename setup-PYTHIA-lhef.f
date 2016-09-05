@@ -23,7 +23,7 @@ C
       external pycomp
 c     multiple interactions
       logical mult_inter
-      parameter (mult_inter=.false.)
+      parameter (mult_inter=.true.)
       integer maxev
       common/mcmaxev/maxev
 
