@@ -285,44 +285,53 @@ c        	          write(*,*) ' a top with more than one b son'
 c Figure out which jets came from the b's i.e. which contain b hadrons
       	i_bjet = in_jet(bhadfromtop,jetvec)
       	i_abjet = in_jet(bhadfromatop,jetvec)
-
+      	i_b1=min(i_bjet,i_abjet)
+      	i_b2=max(i_bjet,i_abjet)
 c We will require at least 2 of the 4 hardest jets to be b-jets (as in MC_TTBAR rivet analysis)
 c If this is not the case, we shall skip the event
-      	counter=counter+1
-      	if(i_bjet.gt.4.or.i_abjet.gt.4) then
-      		write(25,*) 'We have less than two b-jets in our hardest 4 jets'
-      		write(25,*) 'Skipping event:',counter
-      		write(25,*)
-      		return
-      	else
-      		i_b1=max(i_bjet,i_abjet)
-      		i_b2=min(i_bjet,i_abjet)
-      		if(i_bjet.eq.i_abjet) then
-      			write(25,*) 'Both bs clustered into the same jet'
-      			write(25,*) 'Skipping event:',counter
-      			write(25,*)
-      			return
-      		endif
+      	if(whcprg.eq.'LHE') then
       		if(i_b1.eq.1.and.i_b2.eq.2) then
       			i_j1=3
-      			i_j2=4
       		elseif(i_b1.eq.1.and.i_b2.eq.3) then
       			i_j1=2
-      			i_j2=4
-      		elseif(i_b1.eq.1.and.i_b2.eq.4) then
-      			i_j1=2
-      			i_j2=3
       		elseif(i_b1.eq.2.and.i_b2.eq.3) then
       			i_j1=1
-      			i_j2=4
-      		elseif(i_b1.eq.2.and.i_b2.eq.4) then
-      			i_j1=1
-      			i_j2=3
-      		elseif(i_b1.eq.3.and.i_b2.eq.4) then
-      			i_j1=1
-      			i_j2=2
       		endif
-      	endif
+      	else
+      		counter=counter+1
+	      	if(i_bjet.gt.4.or.i_abjet.gt.4) then
+	      		write(25,*) 'We have less than two b-jets in our hardest 4 jets'
+	      		write(25,*) 'Skipping event:',counter
+	      		write(25,*)
+	      		return
+	      	else
+	      		if(i_bjet.eq.i_abjet) then
+	      			write(25,*) 'Both bs clustered into the same jet'
+	      			write(25,*) 'Skipping event:',counter
+	      			write(25,*)
+	      			return
+	      		endif
+	      		if(i_b1.eq.1.and.i_b2.eq.2) then
+	      			i_j1=3
+	      			i_j2=4
+	      		elseif(i_b1.eq.1.and.i_b2.eq.3) then
+	      			i_j1=2
+	      			i_j2=4
+	      		elseif(i_b1.eq.1.and.i_b2.eq.4) then
+	      			i_j1=2
+	      			i_j2=3
+	      		elseif(i_b1.eq.2.and.i_b2.eq.3) then
+	      			i_j1=1
+	      			i_j2=4
+	      		elseif(i_b1.eq.2.and.i_b2.eq.4) then
+	      			i_j1=1
+	      			i_j2=3
+	      		elseif(i_b1.eq.3.and.i_b2.eq.4) then
+	      			i_j1=1
+	      			i_j2=2
+	      		endif
+	      	endif
+	      endif
       endif
 
 C       counter=counter+1
