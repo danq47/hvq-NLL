@@ -101,6 +101,9 @@ void fastjetppgenkt_(const double * p, const int & npart,
     // extract jets (pt-ordered)
     vector<fj::PseudoJet> jets = sorted_by_pt(cs.inclusive_jets(ptmin));
     njets = jets.size();
+    if (njets > 20){
+    	njets=20;
+    }
 
     // find particles inside i-th jet
     vector<fj::PseudoJet> *constit;

@@ -119,7 +119,7 @@ c Analysis subroutine
 ! particle id numbers for identifying them in the event record
 		integer 	 i_top,i_atop,i_bfromtop,i_abfromatop
 		integer	 i_bjet,i_abjet,i_jet
-		integer 	 bhadfromtop,bhadfromatop
+		integer 	 bhadfromtop,bhadfromatop,counter
 		integer   jet_position(10),tmp(10)
 c particle momenta
 		real * 8  p_top(4),p_tb(4),p_b(4),p_bb(4),p_hist(4),p_jet(4)
@@ -144,9 +144,7 @@ c names for the histograms
 		integer lenocc
 		external lenocc
 
-		ngen0 = 0						! ngenerations is used in sonofhep to find which parton
-  10	continue							! the particle is descended from. If we don't find a bjet,
-		ngenerations = 4 + ngen0	! we come back here and search again, with more generations
+		ngen0 = 4
 
 C - KH - 17/8/16 - added block from here ...
 		if (iniwgts) then
@@ -207,15 +205,13 @@ c from the event record
 					if(idhep(jhep).eq.-5) i_abfromatop = jhep		! b~
 				endif
 			endif
-! Select jets in the NLO and LHEF case so that we don't use Fastjet
+! Select jets in the NLO case so that we don't use Fastjet
          if(whcprg.eq.'NLO') then
             if(jhep.gt.2) then ! If it's a final state parton
                if(abs(idhep(jhep)).lt.6.or.idhep(jhep).eq.21) then
                   i_jet = jhep
                endif
             endif
-         elseif(whcprg.eq.'LHE') then
-            i_jet = 5
          else
          	i_jet = 0
          endif
@@ -228,13 +224,13 @@ c for jets, using only final state particles excluding leptons
       enddo
 
 c Call Fastjet to build jets for PYTHIA case
-      if(whcprg.ne.'NLO'.and.whcprg.ne.'LHE') then
+      if(whcprg.ne.'NLO') then
       	mjets = maxjets
       	call buildjets(mjets,j_kt,j_eta,j_rap,j_phi,j_p,jetvec,
      1     	isForClustering)
       endif
 
-      if(whcprg.ne.'NLO'.and.whcprg.ne.'LHE') then
+      if(whcprg.ne.'NLO') then
 c Find the b hadrons
      		bhadfromtop = 0
       	bhadfromatop = 0
@@ -279,10 +275,6 @@ c        	          write(*,*) ' a top with more than one b son'
 c Figure out which jets came from the b's i.e. which contain b hadrons
       	i_bjet = in_jet(bhadfromtop,jetvec)
       	i_abjet = in_jet(bhadfromatop,jetvec)
-      	if(i_bjet.eq.0.or.i_abjet.eq.0) then ! go back to the beginning of the 
-      		ngen0=ngen0+1							  ! analysis and search again
-      		goto 10									  ! with an increased ngenerations
-      	endif
 
 c Find the hardest jets that are not b jets
       	do ixx=1,6
@@ -304,7 +296,10 @@ c Find the hardest jets that are not b jets
       		endif				! jet_position(n) now contains
       	enddo					! the n-th hardest non-b jet
       endif
-C       do ixx=1,10
+
+C       counter=counter+1
+C  		write(23,*) 'event:', counter
+C       do ixx=1,20
 C       	if(j_kt(ixx).gt.0) then
 C       		if(i_bjet.eq.ixx) write(23,*) j_kt(ixx),'b jet'
 C       		if(i_abjet.eq.ixx) write(23,*) j_kt(ixx),'b~ jet'
@@ -594,26 +589,16 @@ C --------------- C
 C - R = 0.7   radius parameter
 C - f = 0.75  overlapping fraction
       palg  = -1
-      r     = 0.7d0
+      r     = 0.4d0
       ptmin = 0d0
       call fastjetppgenkt(ptrack,ntracks,r,palg,ptmin,pjet,njets,jetvec)
       mjets=min(mjets,njets)
       if(njets.eq.0) return
 c check consistency
-C       do k=1,ntracks
-C          if(jetvec(k).gt.0) then
-C             do mu=1,4
-C                pj(mu,jetvec(k))=pj(mu,jetvec(k))+ptrack(mu,k)
-C             enddo
-C          endif
-C       enddo
-      do ixx=1,size(jetvec)		! DQ - for some reason, once inside the k=1,ntracks loop
-      	tmp1(ixx)=jetvec(ixx)	! below, jetvec was giving wrong results, however, outside 
-      enddo								! the loop it was OK so I have just copied the items in 
-      do k=1,ntracks					! the array jetvec into tmp1 and used that inside the loop instead
-         if(tmp1(k).gt.0) then
+      do k=1,ntracks
+         if(jetvec(k).gt.0) then
             do mu=1,4
-               pj(mu,tmp1(k))=pj(mu,tmp1(k))+ptrack(mu,k)
+               pj(mu,jetvec(k))=pj(mu,jetvec(k))+ptrack(mu,k)
             enddo
          endif
       enddo
@@ -639,8 +624,7 @@ C --------------------------------------------------------------------- C
       enddo
       jetvechep = 0
       do j=1,ntracks
-C          jetvechep(itrackhep(j))=jetvec(j)
-      	jetvechep(itrackhep(j))=tmp1(j)	! same as above, just renaming the jetvec
+         jetvechep(itrackhep(j))=jetvec(j)
       enddo
       end
 
