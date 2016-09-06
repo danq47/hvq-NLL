@@ -515,13 +515,19 @@ c (iii-iv) 1st two hardest non b-jets.
 	      						p_hist(mu) = j_p(mu,i_j1)
 	      					endif
 	      				enddo
-	      				cond4 = .true.
+	      				call getyetaptmass(p_hist,y,eta,pt,mass)
+	      				if(pt.gt.0) then
+	      					cond4 = .true.
+	      				endif
 	      			elseif(mxx.eq.4) then
 	      				pf1 = 'j2'
 	      				do mu=1,4
 	      					p_hist(mu) = j_p(mu,i_j2)
 	      				enddo
-	      				cond4 = .true.
+	      				call getyetaptmass(p_hist,y,eta,pt,mass)
+	      				if(pt.gt.0) then
+	      					cond4 = .true.
+	      				endif
 	      			endif
 
 						ls1=lenocc(sf1)
