@@ -20,14 +20,15 @@ c Initialise histograms
 			if(i.eq.2) s1 = '-str'
 C 			if(i.eq.3) s1 = '-unstr'
 
-			do j=1,2
-				if(j.eq.1) s2 = '-coll'
-				if(j.eq.2) s2 = '-wa'
+			do j=1,3
+				if(j.eq.1) s2 = '-all-angle'
+				if(j.eq.2) s2 = '-coll'
+				if(j.eq.3) s2 = '-wa'
 
 				do k=1,2
 					if(k.eq.1) s3 = '-all-mttb'
-C 					if(k.eq.2) s3 = '-mttb-gt-1TeV'
-					if(k.eq.2) s3 = '-mttb-gt-2TeV'
+					if(k.eq.2) s3 = '-mttb-gt-1TeV'
+C 					if(k.eq.2) s3 = '-mttb-gt-2TeV'
 
 c (1.) Observables of the (i) top, (ii) t~, (iii) tt~ system
 c (iv-vii) 1-4th hardest jets.
@@ -53,7 +54,7 @@ c (iv-vii) 1-4th hardest jets.
 						endif
 						if(m.eq.3) then
 							call bookupeqbins(p1(1:lp1)//'_pt_10GeV'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),10d0,0d0,1000d0)
-							call bookupeqbins(p1(1:lp1)//'_pt_50GeV'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),50d0,0d0,2000d0)
+c							call bookupeqbins(p1(1:lp1)//'_pt_50GeV'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),50d0,0d0,2000d0)
 						endif
 					enddo
 
@@ -68,26 +69,25 @@ c (3.) N additional jets
 
 c (4.) distances between jets
 c between the two light jets
-C 	      		if(i.lt.3) then ! running out of room for more histograms - if these show up anything interesting then I can come back and look at unstretchec
-	      			call bookupeqbins('dR_j1_j2'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),0.08d0,0d0,8d0)
-	      			call bookupeqbins('deta_j1_j2'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),0.08d0,0d0,8d0)
-	      			call bookupeqbins('dphi_j1_j2'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),pi/50,0d0,pi)
-c between the two b jets
-	      			call bookupeqbins('dR_b1_b2'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),0.08d0,0d0,8d0)
-	      			call bookupeqbins('deta_b1_b2'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),0.08d0,0d0,8d0)
-	      			call bookupeqbins('dphi_b1_b2'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),pi/50,0d0,pi)
+	     			call bookupeqbins('dR_j1_j2'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),0.08d0,0d0,8d0)
+	     			call bookupeqbins('deta_j1_j2'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),0.08d0,0d0,8d0)
+	     			call bookupeqbins('dphi_j1_j2'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),pi/50,0d0,pi)
+cc between the two b jets
+c	      		call bookupeqbins('dR_b1_b2'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),0.08d0,0d0,8d0)
+c	      		call bookupeqbins('deta_b1_b2'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),0.08d0,0d0,8d0)
+c	      		call bookupeqbins('dphi_b1_b2'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),pi/50,0d0,pi)
 c between the hardest b jet and the hardest light jet
-	      			call bookupeqbins('dR_b1_j1'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),0.08d0,0d0,8d0)
-	      			call bookupeqbins('deta_b1_j1'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),0.08d0,0d0,8d0)
-	      			call bookupeqbins('dphi_b1_j1'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),pi/50,0d0,pi)
+	      		call bookupeqbins('dR_b1_j1'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),0.08d0,0d0,8d0)
+	      		call bookupeqbins('deta_b1_j1'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),0.08d0,0d0,8d0)
+	      		call bookupeqbins('dphi_b1_j1'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),pi/50,0d0,pi)
 c between the hardest b jet and the lighter light jet
-	      			call bookupeqbins('dR_b1_j2'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),0.08d0,0d0,8d0)
-	      			call bookupeqbins('deta_b1_j2'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),0.08d0,0d0,8d0)
-	      			call bookupeqbins('dphi_b1_j2'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),pi/50,0d0,pi)
-C 	      		endif
+	      		call bookupeqbins('dR_b1_j2'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),0.08d0,0d0,8d0)
+	      		call bookupeqbins('deta_b1_j2'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),0.08d0,0d0,8d0)
+	      		call bookupeqbins('dphi_b1_j2'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),pi/50,0d0,pi)
 c (5.) New observable that we have imagined
-	      		call bookupeqbins('jet_pull'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),pi/50,0d0,2*pi)
-
+	      		call bookupeqbins('jet_pull-R'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),0.08d0,0d0,8d0)
+	      		call bookupeqbins('jet_pull-eta'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),0.08d0,0d0,8d0)
+	      		call bookupeqbins('jet_pull-phi'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),pi/50,0d0,pi)
 c (6.) Total transverse momentum
 	      		call bookupeqbins('j-Ht'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),50d0,0d0,2000d0)
 
@@ -123,14 +123,15 @@ c Analysis subroutine
 ! particle id numbers for identifying them in the event record
 		integer 	 i_top,i_atop,i_bfromtop,i_abfromatop
 		integer	 i_bjet,i_abjet,i_jet
-		integer 	 bhadfromtop,bhadfromatop,counter
+		integer 	 bhadfromtop,bhadfromatop,counter,counter2,counter3,c4
 		integer   i_b1,i_b2,i_j1,i_j2
-		integer 	 njets10,njets25,njets40 		! For counting the n-additional jets
+		real * 8  njets10,njets25,njets40 		! For counting the n-additional jets
 ! particle momenta
 		real * 8  p_top(4),p_tb(4),p_b(4),p_bb(4),p_hist(4),p_jet(4)
 ! particle observables
 		real * 8  y,eta,pt,mass,mttbar,yttbar,ptttbar,ptjH,
      1          ptbhadfromtop,ptbhadfromatop,y_t,y_tb,deltay
+     	logical   str,unstr
 ! distances between jets
 		real * 8 dy,deta,dr,dphi
 ! Fastjet stuff
@@ -358,23 +359,22 @@ C       p_b=phep(1:4,i_bfromtop)
 C       p_bb=phep(1:4,i_abfromatop)
       p_jet=phep(1:4,i_jet)
 
-      njets10 = 0
-      njets25 = 0
-      njets40 = 0
+      njets10 = 0.0
+      njets25 = 0.0
+      njets40 = 0.0
       do j=1,mjets
       	if(j.ne.i_b1.and.j.ne.i_b2) then ! don't want to count b jets
          	if(j_kt(j).gt.10) then
-            	njets10 = njets10 + 1
+            	njets10 = njets10 + 1.0
          	endif
          	if(j_kt(j).gt.25) then
-            	njets25 = njets25 + 1
+            	njets25 = njets25 + 1.0
          	endif
          	if(j_kt(j).gt.40) then
-            	njets40 = njets40 + 1
+            	njets40 = njets40 + 1.0
          	endif
          endif
       enddo
-
 
 c calculate kinematic quantities needed for stretched/unstretched spectra
       call getyetaptmass(p_top,y,eta,pt,mass)
@@ -385,40 +385,61 @@ c calculate kinematic quantities needed for stretched/unstretched spectra
       call getyetaptmass(p_top+p_tb,y,eta,pt,mass)
       mttbar=mass
       yttbar=y
+c Decide whether the event is a stretched or unstretched configuration
+      str = .false.
+      unstr = .false.
+      if((rho.eq.1.and.deltay.lt.0).or.(rho.eq.2.and.deltay.gt.0)) then
+      	str = .true.
+      else
+      	unstr = .true.
+      endif
 
 c Fill histograms - make the cuts
-
       do ixx=1,2
+
       	cond1 = .false.
+
       	if(ixx.eq.1) then
       		sf1 = '-incl'
       		cond1 = .true.
       	elseif(ixx.eq.2) then
-      		sf2 = '-str'
-      		if((rho.eq.1.and.deltay.lt.0).or.(rho.eq.2.and.deltay.gt.0)) cond1 = .true.
-C       	elseif(ixx.eq.3) then
-C       		sf2 = '-unstr'
-C       		if((rho.eq.1.and.deltay.gt.0).or.(rho.eq.2.and.deltay.lt.0)) cond1 = .true.
+      		sf1 = '-str'
+      		if(str) then
+      			cond1 = .true.
+      		endif
       	endif
 
-      	do jxx=1,2
+      	do jxx=1,3
+
       		cond2 = .false.
+
       		if(jxx.eq.1) then
+      			sf2 = '-all-angle'
+      			cond2 = .true.
+      		elseif(jxx.eq.2) then
       			sf2 = '-coll'
-      			if(coll.eq.1) cond2 = .true.
-      		else
+      			if(coll.eq.1) then
+      				cond2 = .true.
+      			endif
+      		elseif(jxx.eq.3) then
       			sf2 = '-wa'
-      			if(coll.eq.0) cond2 = .true.
+      			if(coll.eq.0) then
+      				cond2 = .true.
+      			endif
       		endif
 
       		do kxx=1,2
+
       			cond3 = .false.
+
       			if(kxx.eq.1) then
       				sf3 = '-all-mttb'
       				cond3 = .true.
       			elseif(kxx.eq.2) then
-      				sf3 = '-mttb-gt-2TeV'
-      				if(mttbar.gt.2000) cond3 = .true.
+      				sf3 = '-mttb-gt-1TeV'
+      				if(mttbar.gt.1000) then
+      					cond3 = .true.
+      				endif
       			endif
 
 c (1.) Observables of the (i) top, (ii) tt~ system
@@ -468,52 +489,58 @@ c (iii-iv) 1st two hardest non b-jets.
 		 	   	      call filld(pf1(1:lp1)//'_pt_2GeV'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),pt,dsig)
 		 	   	      if(mxx.eq.3) then
 		 	   	      	call filld(pf1(1:lp1)//'_pt_10GeV'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),pt,dsig)
-		 	   	      	call filld(pf1(1:lp1)//'_pt_50GeV'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),pt,dsig)
+c		 	   	      	call filld(pf1(1:lp1)//'_pt_50GeV'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),pt,dsig)
 		 	   	      endif
 		 	   	   endif
 		 	   	enddo
 
 c (2.) Rapidities in the y_ttbar=0 frame
-
-		 	   	call filld('yj1_minus_yttb'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),j_rap(i_j1)-yttbar,dsig)
-		 	   	call filld('yj2_minus_yttb'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),j_rap(i_j2)-yttbar,dsig)
+		 	   	if(cond1.and.cond2.and.cond3) then
+		 	   		call filld('yj1_minus_yttb'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),j_rap(i_j1)-yttbar,dsig)
+		 	   		call filld('yj2_minus_yttb'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),j_rap(i_j2)-yttbar,dsig)
 
 c (3.) N additional jets
-
-		 	   	call filld('Njets_10GeV'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),dble(njets10),dsig)
-      			call filld('Njets_25GeV'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),dble(njets25),dsig)
-      			call filld('Njets_40GeV'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),dble(njets40),dsig)
+		 	   		call filld('Njets_10GeV'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),njets10,dsig)
+      				call filld('Njets_25GeV'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),njets25,dsig)
+      				call filld('Njets_40GeV'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),njets40,dsig)
 
 c (4.) distances between jets
 
 c between the two light jets
-      			call getdydetadphidr(j_p(:,i_j1),j_p(:,i_j2),dy,deta,dphi,dr)
-      			call filld('dR_j1_j2'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),dr,dsig)
-      			call filld('deta_j1_j2'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),deta,dsig)
-      			call filld('dphi_j1_j2'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),dphi,dsig)
-c between the two b jets
-      			call getdydetadphidr(j_p(:,i_b1),j_p(:,i_b2),dy,deta,dphi,dr)
-      			call filld('dR_b1_b2'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),dr,dsig)
-      			call filld('deta_b1_b2'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),deta,dsig)
-      			call filld('dphi_b1_b2'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),dphi,dsig)
+      				call getdydetadphidr(j_p(:,i_j1),j_p(:,i_j2),dy,deta,dphi,dr)
+      				call filld('dR_j1_j2'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),dr,dsig)
+      				call filld('deta_j1_j2'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),deta,dsig)
+      				call filld('dphi_j1_j2'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),dphi,dsig)
+cc between the two b jets
+c      				call getdydetadphidr(j_p(:,i_b1),j_p(:,i_b2),dy,deta,dphi,dr)
+c      				call filld('dR_b1_b2'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),dr,dsig)
+c      				call filld('deta_b1_b2'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),deta,dsig)
+c      				call filld('dphi_b1_b2'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),dphi,dsig)
 c between the b1 and j1
-      			call getdydetadphidr(j_p(:,i_b1),j_p(:,i_j1),dy,deta,dphi,dr)
-      			call filld('dR_b1_j1'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),dr,dsig)
-      			call filld('deta_b1_j1'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),deta,dsig)
-      			call filld('dphi_b1_j1'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),dphi,dsig)   
+      				call getdydetadphidr(j_p(:,i_b1),j_p(:,i_j1),dy,deta,dphi,dr)
+      				call filld('dR_b1_j1'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),dr,dsig)
+      				call filld('deta_b1_j1'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),deta,dsig)
+      				call filld('dphi_b1_j1'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),dphi,dsig)   
 c between the b1 and j2
-      			call getdydetadphidr(j_p(:,i_b1),j_p(:,i_j2),dy,deta,dphi,dr)
-      			call filld('dR_b1_j2'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),dr,dsig)
-      			call filld('deta_b1_j2'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),deta,dsig)
-      			call filld('dphi_b1_j2'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),dphi,dsig)      			
+      				call getdydetadphidr(j_p(:,i_b1),j_p(:,i_j2),dy,deta,dphi,dr)
+      				call filld('dR_b1_j2'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),dr,dsig)
+      				call filld('deta_b1_j2'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),deta,dsig)
+      				call filld('dphi_b1_j2'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),dphi,dsig)      			
 
 c (5.) New observable that we have imagined
-!	      		call bookupeqbins('jet_pull'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),pi/50,0d0,2*pi)
+      				if(( j_rap(i_j1) - y_t ).lt.0) then ! look in the lefthand hemisphere only
+      					if(j_kt(i_j1).gt.10) then ! make a pT cut on the jet
+      						call getdydetadphidr(j_p(:,i_j1),p_top,dy,deta,dphi,dr)
+	      					call filld('jet_pull-R'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),dr,dsig)
+	      					call filld('jet_pull-eta'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),deta,dsig)
+	      					call filld('jet_pull-phi'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),dphi,dsig)
+	      				endif
+	      			endif
 
 c (6.) Total transverse momentum
-					ptjH = j_kt(1)+j_kt(2)+j_kt(3)+j_kt(4) ! the sum of the 4 hardest jets kT
-	      		call filld('j-Ht'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),ptjH,dsig)
-
+						ptjH = j_kt(1)+j_kt(2)+j_kt(3)+j_kt(4) ! the sum of the 4 hardest jets kT
+	      			call filld('j-Ht'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),ptjH,dsig)
+	      		endif
 	      	enddo
 	      enddo
 	   enddo
