@@ -96,6 +96,18 @@ c (7.) Gap fraction - not done yet!
 	      	enddo
 	      enddo
 	   enddo
+
+! for comparison with NLO plots
+
+	   call bookupeqbins('j1_pt_2GeV-total',2d0,0d0,500d0)
+	   call bookupeqbins('j1_pt_10GeV-total',10d0,0d0,1000d0)
+	   call bookupeqbins('j1_pt_2GeV-gg',2d0,0d0,500d0)
+	   call bookupeqbins('j1_pt_10GeV-gg',10d0,0d0,1000d0)
+	   call bookupeqbins('j1_pt_2GeV-gg-str',2d0,0d0,500d0)
+	   call bookupeqbins('j1_pt_10GeV-gg-str',10d0,0d0,1000d0)
+	   call bookupeqbins('j1_pt_2GeV-gg-unstr',2d0,0d0,500d0)
+	   call bookupeqbins('j1_pt_10GeV-gg-unstr',10d0,0d0,1000d0)
+
 		end
 
 
@@ -404,6 +416,32 @@ c Decide whether the event is a stretched or unstretched configuration
       endif
 
 c Fill histograms - make the cuts
+
+c First fill in the pT spectra for the NLO comparison
+
+		if(whcprg.eq.'NLO') then
+			p_hist(:)=p_jet(:)
+		else
+			p_hist(:)=j_p(:,i_j1)
+		endif
+
+		call getyetaptmass(p_hist,y,eta,pt,mass)
+
+		call filld('j1_pt_2GeV-total',pt,dsig)
+		call filld('j1_pt_10GeV-total',pt,dsig)
+		if(id1.eq.0.and.id2.eq.0) then
+			call filld('j1_pt_2GeV-gg',pt,dsig)
+			call filld('j1_pt_10GeV-gg',pt,dsig)
+			if(str) then
+				call filld('j1_pt_2GeV-gg-str',pt,dsig)
+				call filld('j1_pt_10GeV-gg-str',pt,dsig)
+			elseif(unstr) then
+				call filld('j1_pt_2GeV-gg-unstr',pt,dsig)
+				call filld('j1_pt_10GeV-gg-unstr',pt,dsig)
+			endif
+		endif
+
+
       do ixx=1,2
 
       	cond1 = .false.
