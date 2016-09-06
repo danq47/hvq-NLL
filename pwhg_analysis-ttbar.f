@@ -291,24 +291,33 @@ c Figure out which jets came from the b's i.e. which contain b hadrons
 c We will require at least 2 of the 4 hardest jets to be b-jets (as in MC_TTBAR rivet analysis)
 c If this is not the case, we shall skip the event
       	if(whcprg.eq.'LHE') then
+      		counter=counter+1
       		if(i_b1.eq.1.and.i_b2.eq.2) then
       			i_j1=3
       		elseif(i_b1.eq.1.and.i_b2.eq.3) then
       			i_j1=2
       		elseif(i_b1.eq.2.and.i_b2.eq.3) then
       			i_j1=1
-      		endif
+      		elseif(i_b1.eq.i_b2) then
+      			counter2=counter2+1
+      			write(25,*) 'Both bs clustered into the same jet'
+	      		write(25,*) 'Skipping event:',counter2,'of',counter
+	      		write(25,*)
+	      		return
+	      	endif
       	else
       		counter=counter+1
 	      	if(i_bjet.gt.4.or.i_abjet.gt.4) then
+	      		counter2=counter2+1
 	      		write(25,*) 'We have less than two b-jets in our hardest 4 jets'
-	      		write(25,*) 'Skipping event:',counter
+	      		write(25,*) 'Skipping event:',counter2,'of',counter
 	      		write(25,*)
 	      		return
 	      	else
 	      		if(i_bjet.eq.i_abjet) then
+	      			counter2=counter2+1
 	      			write(25,*) 'Both bs clustered into the same jet'
-	      			write(25,*) 'Skipping event:',counter
+	      			write(25,*) 'Skipping event:',counter2,'of',counter
 	      			write(25,*)
 	      			return
 	      		endif
@@ -335,8 +344,8 @@ c If this is not the case, we shall skip the event
 	      endif
       endif
 
-C       counter=counter+1
-C  		write(23,*) 'event:', counter
+C       counter3=counter3+1
+C  		write(23,*) 'event:', counter3
 C       do ixx=1,20
 C       	if(j_kt(ixx).gt.0) then
 C       		if(i_bjet.eq.ixx) write(23,*) j_kt(ixx),'b jet'
