@@ -44,8 +44,8 @@ c (iv-vii) 1-4th hardest jets.
 						ls3=lenocc(s3)
 						lp1=lenocc(p1)
 
-						call bookupeqbins(p1(1:lp1)//'_y'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),0.08d0,-8d0,8d0)
-						call bookupeqbins(p1(1:lp1)//'_eta'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),0.08d0,-8d0,8d0)
+						call bookupeqbins(p1(1:lp1)//'_y'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),0.32d0,-8d0,8d0)
+						call bookupeqbins(p1(1:lp1)//'_eta'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),0.32d0,-8d0,8d0)
 ! different ranges on the pt spectra
 						if(m.le.3) then
 							call bookupeqbins(p1(1:lp1)//'_pt_2GeV'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),2d0,0d0,500d0)
@@ -59,8 +59,8 @@ c							call bookupeqbins(p1(1:lp1)//'_pt_50GeV'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3
 					enddo
 
 c (2.) Rapidities in the y_ttbar=0 frame
-	      		call bookupeqbins('yj1_minus_yttb'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),0.08d0,-8d0,8d0)
-	      		call bookupeqbins('yj2_minus_yttb'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),0.08d0,-8d0,8d0)
+	      		call bookupeqbins('yj1_minus_yttb'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),0.32d0,-8d0,8d0)
+	      		call bookupeqbins('yj2_minus_yttb'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),0.32d0,-8d0,8d0)
 
 c (3.) N additional jets
 	      		call bookupeqbins('Njets_10GeV'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),1d0,-0.5d0,10.5d0)
@@ -69,24 +69,24 @@ c (3.) N additional jets
 
 c (4.) distances between jets
 c between the two light jets
-	     			call bookupeqbins('dR_j1_j2'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),0.08d0,0d0,8d0)
-	     			call bookupeqbins('deta_j1_j2'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),0.08d0,0d0,8d0)
+	     			call bookupeqbins('dR_j1_j2'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),0.32d0,0d0,8d0)
+	     			call bookupeqbins('deta_j1_j2'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),0.32d0,0d0,8d0)
 	     			call bookupeqbins('dphi_j1_j2'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),pi/50,0d0,pi)
 cc between the two b jets
 c	      		call bookupeqbins('dR_b1_b2'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),0.08d0,0d0,8d0)
 c	      		call bookupeqbins('deta_b1_b2'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),0.08d0,0d0,8d0)
 c	      		call bookupeqbins('dphi_b1_b2'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),pi/50,0d0,pi)
 c between the hardest b jet and the hardest light jet
-	      		call bookupeqbins('dR_b1_j1'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),0.08d0,0d0,8d0)
-	      		call bookupeqbins('deta_b1_j1'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),0.08d0,0d0,8d0)
+	      		call bookupeqbins('dR_b1_j1'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),0.32d0,0d0,8d0)
+	      		call bookupeqbins('deta_b1_j1'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),0.32d0,0d0,8d0)
 	      		call bookupeqbins('dphi_b1_j1'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),pi/50,0d0,pi)
 c between the hardest b jet and the lighter light jet
-	      		call bookupeqbins('dR_b1_j2'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),0.08d0,0d0,8d0)
-	      		call bookupeqbins('deta_b1_j2'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),0.08d0,0d0,8d0)
+	      		call bookupeqbins('dR_b1_j2'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),0.32d0,0d0,8d0)
+	      		call bookupeqbins('deta_b1_j2'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),0.32d0,0d0,8d0)
 	      		call bookupeqbins('dphi_b1_j2'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),pi/50,0d0,pi)
 c (5.) New observable that we have imagined
-	      		call bookupeqbins('jet_pull-R'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),0.08d0,0d0,8d0)
-	      		call bookupeqbins('jet_pull-eta'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),0.08d0,0d0,8d0)
+	      		call bookupeqbins('jet_pull-R'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),0.32d0,0d0,8d0)
+	      		call bookupeqbins('jet_pull-eta'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),0.32d0,0d0,8d0)
 	      		call bookupeqbins('jet_pull-phi'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),pi/50,0d0,pi)
 c (6.) Total transverse momentum
 	      		call bookupeqbins('j-Ht'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),50d0,0d0,2000d0)
