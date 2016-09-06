@@ -47,6 +47,12 @@ c Flag to see if we use soft approximation of the planar matrix elements
       else
       	flg_rsoft = .false.
       endif
+c Flag to see if we use gg matrix elements for NLO calculation
+      if(powheginput('#b0NLO').eq.1d0) then
+      	flg_b0_NLO = .true.
+      else
+      	flg_b0_NLO = .false.
+      endif
 
 c whether to save btilde calls to set up upper bounding envelope
       if(powheginput('#storemintupb').eq.1d0) then

@@ -427,17 +427,19 @@ c First fill in the pT spectra for the NLO comparison
 
 		call getyetaptmass(p_hist,y,eta,pt,mass)
 
-		call filld('j1_pt_2GeV-total',pt,dsig)
-		call filld('j1_pt_10GeV-total',pt,dsig)
-		if(id1.eq.0.and.id2.eq.0) then
-			call filld('j1_pt_2GeV-gg',pt,dsig)
-			call filld('j1_pt_10GeV-gg',pt,dsig)
-			if(str) then
-				call filld('j1_pt_2GeV-gg-str',pt,dsig)
-				call filld('j1_pt_10GeV-gg-str',pt,dsig)
-			elseif(unstr) then
-				call filld('j1_pt_2GeV-gg-unstr',pt,dsig)
-				call filld('j1_pt_10GeV-gg-unstr',pt,dsig)
+		if(pt.gt.0) then
+			call filld('j1_pt_2GeV-total',pt,dsig)
+			call filld('j1_pt_10GeV-total',pt,dsig)
+			if(id1.eq.0.and.id2.eq.0) then
+				call filld('j1_pt_2GeV-gg',pt,dsig)
+				call filld('j1_pt_10GeV-gg',pt,dsig)
+				if(str) then
+					call filld('j1_pt_2GeV-gg-str',pt,dsig)
+					call filld('j1_pt_10GeV-gg-str',pt,dsig)
+				elseif(unstr) then
+					call filld('j1_pt_2GeV-gg-unstr',pt,dsig)
+					call filld('j1_pt_10GeV-gg-unstr',pt,dsig)
+				endif
 			endif
 		endif
 

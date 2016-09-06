@@ -37,6 +37,9 @@ C
 C flg_rsoft: .true. means we use the soft limit of the planar
 C matrix elements, .false. means we use the usual (hard) MEs
 C
+C flg_b0_NLO: .true. - testing Born zeros - modify MEs
+C to only use gg channel terms so we can compare NLO with LHEF
+C
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 
       logical flg_nlotest,flg_withsubtr,flg_withdamp,flg_withreg,
@@ -54,7 +57,7 @@ CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 C
 C DQ flags
 C
-     2     flg_newsuda,flg_remnant,flg_rsoft,
+     2     flg_newsuda,flg_remnant,flg_rsoft,flg_b0_NLO,
 C
 C End DQ flags
 C
@@ -77,7 +80,7 @@ C
 C
 C DQ flags
 C
-     4     flg_newsuda,flg_remnant,flg_rsoft,
+     4     flg_newsuda,flg_remnant,flg_rsoft,flg_b0_NLO,
 C
 C End DQ flags
 C
