@@ -91,8 +91,8 @@ c (5.) New observable that we have imagined
 c (6.) Total transverse momentum
 	      		call bookupeqbins('j-Ht'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),50d0,0d0,2000d0)
 
-c (7.) Gap fraction - not done yet!
-					call bookupeqbins('gap-fraction-2GeV'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),2d0,0d0,500d0)
+c (7.) Gap fraction
+c					call bookupeqbins('gap-fraction-5GeV'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),5d0,0d0,500d0)
 c					call bookupeqbins('gap-fraction-10GeV'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),10d0,0d0,1000d0)
 
 	      	enddo
@@ -548,15 +548,15 @@ c (iii-iv) 1st two hardest non b-jets.
 		 	   	      call filld(pf1(1:lp1)//'_pt_2GeV'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),pt,dsig)
 		 	   	      if(mxx.eq.3) then
 		 	   	      	call filld(pf1(1:lp1)//'_pt_10GeV'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),pt,dsig)
-c (1.a) Gap fraction
-								binsize=2d0
-								nbins=250
-								do bxx=1,nbins
-									bin_edge=binsize*bxx
-									if(pt.gt.bin_edge) then
-										call filld('gap-fraction-2GeV'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),binsize*b2xx + 0.00001,binsize)
-									endif
-								enddo		
+C c (1.a) Gap fraction
+C 								binsize=5d0
+C 								nbins=100
+C 								do bxx=1,nbins
+C 									bin_edge=binsize*bxx
+C 									if(pt.lt.bin_edge) then
+C 										call filld('gap-fraction-5GeV'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),binsize*bxx - 0.00001,binsize)
+C 									endif
+C 								enddo		
 c		 	   	      	call filld(pf1(1:lp1)//'_pt_50GeV'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),pt,dsig)
 		 	   	      endif
 		 	   	   endif
