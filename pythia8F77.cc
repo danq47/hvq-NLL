@@ -97,7 +97,7 @@ extern "C" {
       //      pythia.readString("Tune:pp = 5"); // Default
     }
 
-    pythia.readString("PartonLevel:MPI = on");
+    pythia.readString("PartonLevel:MPI = off");
     if(cpy8tune_.nohad == 1) {
       pythia.readString("HadronLevel:All = off");
     }
