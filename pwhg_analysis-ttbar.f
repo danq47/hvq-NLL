@@ -166,7 +166,7 @@ c names for the histograms
 		integer lenocc
 		external lenocc
 		real * 8 bin_edge,binsize			! These are for making
-		integer 	nbins,bxx,b2xx,cdan					! the gap fraction plot
+		integer 	nbins,bxx,b2xx,cdan,c1,c2					! the gap fraction plot
 
 		ngenerations = 4
 
@@ -596,12 +596,16 @@ c between the b1 and j2
       				call filld('dphi_b1_j2'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),dphi,dsig)      			
 
 c (5.) New observable that we have imagined
-      				if(( j_rap(i_j1) - y_t ).lt.0) then ! look in the lefthand hemisphere only
-      					if(j_kt(i_j1).gt.10) then ! make a pT cut on the jet
-      						call getdydetadphidr(j_p(:,i_j1),p_top,dy,deta,dphi,dr)
-	      					call filld('jet_pull-R'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),dr,dsig)
-	      					call filld('jet_pull-eta'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),deta,dsig)
-	      					call filld('jet_pull-phi'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),dphi,dsig)
+      				if(id1.eq.0.and.id2.eq.0) then ! only look at gg terms
+      					if(abs(deltay).lt.0.2) then ! selects terms where Bfact ~ 0.5 i.e. the two matrix elements are roughly equal magnitudes
+		      				if(( j_rap(i_j1) - y_t ).lt.0) then ! look in the lefthand hemisphere only
+      							if(j_kt(i_j1).gt.10) then ! make a pT cut on the jet
+      								call getdydetadphidr(j_p(:,i_j1),p_top,dy,deta,dphi,dr)
+	      							call filld('jet_pull-R'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),dr,dsig)
+			      					call filld('jet_pull-eta'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),deta,dsig)
+	      							call filld('jet_pull-phi'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),dphi,dsig)
+	      						endif
+	      					endif
 	      				endif
 	      			endif
 
