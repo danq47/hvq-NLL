@@ -434,7 +434,7 @@ c First fill in the pT spectra for the NLO comparison
 		if(pt.gt.0) then
 			call filld('j1_pt_2GeV-total',pt,dsig)
 			call filld('j1_pt_10GeV-total',pt,dsig)
-			if(id1.eq.0.and.id2.eq.0) then
+			if(rho.eq.1.or.rho.eq.2) then
 				call filld('j1_pt_2GeV-gg',pt,dsig)
 				call filld('j1_pt_10GeV-gg',pt,dsig)
 				if(str) then
