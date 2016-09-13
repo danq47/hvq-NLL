@@ -596,7 +596,7 @@ c between the b1 and j2
       				call filld('dphi_b1_j2'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),dphi,dsig)      			
 
 c (5.) New observable that we have imagined
-      				if(id1.eq.0.and.id2.eq.0) then ! only look at gg terms
+      				if(rho.eq.1.or.rho.eq.2) then ! only look at gg terms
       					if(abs(deltay).lt.0.2) then ! selects terms where Bfact ~ 0.5 i.e. the two matrix elements are roughly equal magnitudes
 		      				if(( j_rap(i_j1) - y_t ).lt.0) then ! look in the lefthand hemisphere only
       							if(j_kt(i_j1).gt.10) then ! make a pT cut on the jet
