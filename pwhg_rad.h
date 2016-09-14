@@ -44,8 +44,6 @@ c
 c rho_idx: the value of rho that we are calculating
 c (included in line 15 above)
 c
-c rhoweight: B1/(B1+B2) - used to calculate rho in Born.f and gen_index
-c
 c Bfact: B^\rho/(B1+B2) - after we have chosen \rho, Bfact * B_{tot}
 c is the Born cross section for the chosen value of rho
 c
@@ -79,7 +77,7 @@ ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c
 c DQ variables
 c
-     9	  rhoweight,Bfact,Rfact,rhorweight(6),
+     9	  Bfact,Rfact,rhorweight(6),
      &     ggbornplanar1,ggbornplanar2,rsoft1,rsoft2
 c
 c end DQ variables
@@ -144,7 +142,7 @@ c     and in the generation of radiation
 c
 c DQ variables
 c
-     6     rhoweight,rhorweight,Bfact,Rfact,
+     6     rhorweight,Bfact,Rfact,
      7     ggbornplanar1,ggbornplanar2,rsoft1,rsoft2,
 c
 c end DQ variables

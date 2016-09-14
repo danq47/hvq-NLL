@@ -6,7 +6,7 @@
       include 'pwhg_rad.h'
       include 'pwhg_flg.h'
       integer j,alr,em
-      real*8 random
+      real*8 random,bweight
       external random
       do j=1,rad_nkinreg
          rad_kinreg_on(j)=.false.
@@ -24,14 +24,16 @@
          endif
       enddo
 
+      bweight=ggbornplanar1/(ggbornplanar1+ggbornplanar2)
+
 c Choosing a value for rho
       if(rad_ubornidx.eq.1) then
-      	if(random().lt.rhoweight) then
+      	if(random().lt.bweight) then
             rho_idx=1
-         	Bfact=rhoweight
+         	Bfact=bweight
          else
          	rho_idx=2
-           	Bfact=(1d0-rhoweight)
+           	Bfact=(1d0-bweight)
         	endif
      	else
      		rho_idx=rad_ubornidx+1
