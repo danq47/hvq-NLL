@@ -932,9 +932,6 @@ c we multiply it by Rfact/Bfact i.e. the factor multiplying R^{alpha_r}/B^{f_b} 
 	               		else
 	               			Rfact = rsoft2/(rsoft1+rsoft2)
 	               		endif
-                             else
-                                Rfact=1d0
-                                Bfact=1d0
                		endif
 
                      rr(alr) = (Rfact/Bfact) * rr(alr)
