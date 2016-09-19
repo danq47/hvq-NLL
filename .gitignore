@@ -17,4 +17,10 @@ testrun-tdec-lhc/*.top
 testrun-tdec-lhc/FlavRegList
 testrun-tdec-lhc/pwhg_checklimits
 
+.nfs*
 
+*RUNS*
+
+clean.sh
+plots/
+setup_dirs*sh
