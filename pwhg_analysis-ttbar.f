@@ -38,6 +38,9 @@ c (iv-vii) 1-4th hardest jets.
 						ls3=lenocc(s3)
 						lp1=lenocc(p1)
 
+						if(m.eq.2) then
+							call bookupeqbins(p1(1:lp1)//'_m'//s1(1:ls1)//s3(1:ls3),20d0,100d0,3100d0)
+						endif
 						call bookupeqbins(p1(1:lp1)//'_y'//s1(1:ls1)//s3(1:ls3),0.32d0,-8d0,8d0)
 						call bookupeqbins(p1(1:lp1)//'_eta'//s1(1:ls1)//s3(1:ls3),0.32d0,-8d0,8d0)
 ! different ranges on the pt spectra
@@ -82,16 +85,16 @@ c (5.) New observable that we have imagined
 ! pT>10
 !	      		call bookupeqbins('jet_pull-R'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3)//'pT-gt-10',0.32d0,0d0,8d0)
 !	      		call bookupeqbins('jet_pull-eta'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3)//'pT-gt-10',0.32d0,0d0,8d0)
-	      		call bookupeqbins('jet_pull'//s1(1:ls1)//s3(1:ls3)//'-10',pi/50,0d0,pi)
+!	      		call bookupeqbins('jet_pull'//s1(1:ls1)//s3(1:ls3)//'-10',pi/50,0d0,pi)
 ! pT>25
 !	      		call bookupeqbins('jet_pull-R'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3)//'pT-gt-25',0.32d0,0d0,8d0)
 !	      		call bookupeqbins('jet_pull-eta'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3)//'pT-gt-25',0.32d0,0d0,8d0)
-	      		call bookupeqbins('jet_pull'//s1(1:ls1)//s3(1:ls3)//'-25',pi/50,0d0,pi)
+!	      		call bookupeqbins('jet_pull'//s1(1:ls1)//s3(1:ls3)//'-25',pi/50,0d0,pi)
 ! pT>40
 !	      		call bookupeqbins('jet_pull-R'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3)//'pT-gt-40',0.32d0,0d0,8d0)
 !	      		call bookupeqbins('jet_pull-eta'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3)//'pT-gt-40',0.32d0,0d0,8d0)
-	      		call bookupeqbins('jet_pull'//s1(1:ls1)//s3(1:ls3)//'-40',pi/50,0d0,pi)
-c (6.) Total transverse momentum
+!	      		call bookupeqbins('jet_pull'//s1(1:ls1)//s3(1:ls3)//'-40',pi/50,0d0,pi)
+! (6.) Total transverse momentum
 	      		call bookupeqbins('j-Ht'//s1(1:ls1)//s3(1:ls3),50d0,0d0,2000d0)
 
 c (7.) Gap fraction
@@ -549,6 +552,9 @@ c (iii-iv) 1st two hardest non b-jets.
 
 						if(cond1.and.cond2.and.cond3.and.cond4) then
 							call getyetaptmass(p_hist,y,eta,pt,mass)
+							if(mxx.eq.2) then
+								call filld(pf1(1:lp1)//'_m'//sf1(1:ls1)//sf3(1:ls3),mass,dsig)
+							endif
 							call filld(pf1(1:lp1)//'_y'//sf1(1:ls1)//sf3(1:ls3),y,dsig)
 				         call filld(pf1(1:lp1)//'_eta'//sf1(1:ls1)//sf3(1:ls3),eta,dsig)
 		 	   	      call filld(pf1(1:lp1)//'_pt_2GeV'//sf1(1:ls1)//sf3(1:ls3),pt,dsig)
@@ -602,22 +608,22 @@ c between the two light jets
 !      				call filld('dphi_b1_j2'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),dphi,dsig)      			
 
 c (5.) New observable that we have imagined
-      				if(rho.eq.1.or.rho.eq.2) then ! only look at gg terms
-      					if(abs(deltay).lt.0.1) then ! selects terms where Bfact ~ 0.5 i.e. the two matrix elements are roughly equal magnitudes
-		      				if(( j_rap(i_j1) - y_t ).lt.0) then ! look in the lefthand hemisphere only
-		      				call getdydetadphidr(j_p(:,i_j1),p_top,dy,deta,dphi,dr)
-      							if(j_kt(i_j1).gt.10) then ! make a pT cut on the jet
-!	      							call filld('jet_pull-R'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),dr,dsig)
-!			      					call filld('jet_pull-eta'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),deta,dsig)
-	      							call filld('jet_pull'//sf1(1:ls1)//sf3(1:ls3)//'-10',dphi,dsig)
-	      						elseif(j_kt(i_j1).gt.25) then
-	      							call filld('jet_pull'//sf1(1:ls1)//sf3(1:ls3)//'-25',dphi,dsig)
-	      						elseif(j_kt(i_j1).gt.40) then
-	      							call filld('jet_pull'//sf1(1:ls1)//sf3(1:ls3)//'-40',dphi,dsig)
-	      						endif
-	      					endif
-	      				endif
-	      			endif
+C       				if(rho.eq.1.or.rho.eq.2) then ! only look at gg terms
+C       					if(abs(deltay).lt.0.1) then ! selects terms where Bfact ~ 0.5 i.e. the two matrix elements are roughly equal magnitudes
+C 		      				if(( j_rap(i_j1) - y_t ).lt.0) then ! look in the lefthand hemisphere only
+C 		      				call getdydetadphidr(j_p(:,i_j1),p_top,dy,deta,dphi,dr)
+C       							if(j_kt(i_j1).gt.10) then ! make a pT cut on the jet
+C !	      							call filld('jet_pull-R'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),dr,dsig)
+C !			      					call filld('jet_pull-eta'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),deta,dsig)
+C 	      							call filld('jet_pull'//sf1(1:ls1)//sf3(1:ls3)//'-10',dphi,dsig)
+C 	      						elseif(j_kt(i_j1).gt.25) then
+C 	      							call filld('jet_pull'//sf1(1:ls1)//sf3(1:ls3)//'-25',dphi,dsig)
+C 	      						elseif(j_kt(i_j1).gt.40) then
+C 	      							call filld('jet_pull'//sf1(1:ls1)//sf3(1:ls3)//'-40',dphi,dsig)
+C 	      						endif
+C 	      					endif
+C 	      				endif
+C 	      			endif
 
 c (6.) Total transverse momentum
 						ptjH = j_kt(1)+j_kt(2)+j_kt(3)+j_kt(4) ! the sum of the 4 hardest jets kT
@@ -745,7 +751,7 @@ C --------------- C
 C - R = 0.7   radius parameter
 C - f = 0.75  overlapping fraction
       palg  = -1
-      r     = 0.8d0
+      r     = 0.4d0
       ptmin = 0d0
       call fastjetppgenkt(ptrack,ntracks,r,palg,ptmin,pjet,njets,jetvec)
       mjets=min(mjets,njets)
