@@ -55,47 +55,10 @@ c							call bookupeqbins(p1(1:lp1)//'_pt_50GeV'//s1(1:ls1)//s3(1:ls3),50d0,0d0,
 						endif
 					enddo
 
-C ! (2.) Rapidities in the y_ttbar=0 frame
-C 	      		call bookupeqbins('yj1_minus_yttb'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),0.32d0,-8d0,8d0)
-C 	      		call bookupeqbins('yj2_minus_yttb'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),0.32d0,-8d0,8d0)
-
 c (3.) N additional jets
 	      		call bookupeqbins('Njets_10GeV'//s1(1:ls1)//s3(1:ls3),1d0,-0.5d0,10.5d0)
 	      		call bookupeqbins('Njets_25GeV'//s1(1:ls1)//s3(1:ls3),1d0,-0.5d0,10.5d0)
 	      		call bookupeqbins('Njets_40GeV'//s1(1:ls1)//s3(1:ls3),1d0,-0.5d0,10.5d0)
-
-C ! (4.) distances between jets
-C ! between the two light jets
-C 	     			call bookupeqbins('dR_j1_j2'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),0.32d0,0d0,8d0)
-C 	     			call bookupeqbins('deta_j1_j2'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),0.32d0,0d0,8d0)
-C 	     			call bookupeqbins('dphi_j1_j2'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),pi/50,0d0,pi)
-C cc between the two b jets
-C c	      		call bookupeqbins('dR_b1_b2'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),0.08d0,0d0,8d0)
-C c	      		call bookupeqbins('deta_b1_b2'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),0.08d0,0d0,8d0)
-C c	      		call bookupeqbins('dphi_b1_b2'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),pi/50,0d0,pi)
-C c between the hardest b jet and the hardest light jet
-C 	      		call bookupeqbins('dR_b1_j1'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),0.32d0,0d0,8d0)
-C 	      		call bookupeqbins('deta_b1_j1'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),0.32d0,0d0,8d0)
-C 	      		call bookupeqbins('dphi_b1_j1'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),pi/50,0d0,pi)
-C c between the hardest b jet and the lighter light jet
-C 	      		call bookupeqbins('dR_b1_j2'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),0.32d0,0d0,8d0)
-C 	      		call bookupeqbins('deta_b1_j2'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),0.32d0,0d0,8d0)
-C 	      		call bookupeqbins('dphi_b1_j2'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),pi/50,0d0,pi)
-c (5.) New observable that we have imagined
-! pT>10
-!	      		call bookupeqbins('jet_pull-R'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3)//'pT-gt-10',0.32d0,0d0,8d0)
-!	      		call bookupeqbins('jet_pull-eta'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3)//'pT-gt-10',0.32d0,0d0,8d0)
-!	      		call bookupeqbins('jet_pull'//s1(1:ls1)//s3(1:ls3)//'-10',pi/50,0d0,pi)
-! pT>25
-!	      		call bookupeqbins('jet_pull-R'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3)//'pT-gt-25',0.32d0,0d0,8d0)
-!	      		call bookupeqbins('jet_pull-eta'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3)//'pT-gt-25',0.32d0,0d0,8d0)
-!	      		call bookupeqbins('jet_pull'//s1(1:ls1)//s3(1:ls3)//'-25',pi/50,0d0,pi)
-! pT>40
-!	      		call bookupeqbins('jet_pull-R'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3)//'pT-gt-40',0.32d0,0d0,8d0)
-!	      		call bookupeqbins('jet_pull-eta'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3)//'pT-gt-40',0.32d0,0d0,8d0)
-!	      		call bookupeqbins('jet_pull'//s1(1:ls1)//s3(1:ls3)//'-40',pi/50,0d0,pi)
-! (6.) Total transverse momentum
-	      		call bookupeqbins('j-Ht'//s1(1:ls1)//s3(1:ls3),50d0,0d0,2000d0)
 
 c (7.) Gap fraction
 c					call bookupeqbins('gap-fraction-5GeV'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),5d0,0d0,500d0)
@@ -211,32 +174,14 @@ C - KH - 17/8/16 - down to here ; copied from DYNNLOPS's pwhg_analysis-minlo.f
 c Initialise all numbers as 0
 		i_top=0
 		i_atop=0
-		i_bfromtop=0
-		i_abfromatop=0
-		i_bjet=0
-		i_abjet=0
-		i_b1 = 0
-		i_b2 = 0
-		i_j1 = 0
-		i_j2 = 0
-		IsForClustering = .false.
-		i_jet = 0
-		p_jet(:) = 0
-		p_hist(:) = 0
+		i_jet=0
+		IsForClustering=.false.
 
-c Find the tops (and the bs that they decay into) 
-c from the event record
 		do jhep=1,nhep
 			id=idhep(jhep)
 			if(idhep(jhep).eq.6) i_top = jhep 		! find t
 			if(idhep(jhep).eq.-6) i_atop = jhep 	! and t~
 			id=abs(id)
-			if(id.eq.5.or.id.eq.24) then
-				if(min(sonofid(6,jhep),sonofid(-6,jhep)).lt.1d5) then
-					if(idhep(jhep).eq.5) i_bfromtop = jhep			! b
-					if(idhep(jhep).eq.-5) i_abfromatop = jhep		! b~
-				endif
-			endif
 ! Select jets in the NLO case so that we don't use Fastjet
          if(whcprg.eq.'NLO') then
             if(jhep.gt.2) then ! If it's a final state parton
@@ -248,135 +193,19 @@ c from the event record
          	i_jet = 0
          endif
 c for jets, using only final state particles excluding leptons
-         if(isthep(jhep).eq.1.and.(id.lt.11.or.id.gt.16)) then
+         if(isthep(jhep).eq.1.and.(id.lt.11.or.id.gt.16).and.id.ne.6) then
             IsForClustering(jhep) = .true.
          else
             IsForClustering(jhep) = .false.
          endif
       enddo
 
-c Call Fastjet to build jets for PYTHIA case
+c Call Fastjet to build jets for LHEF and PYTHIA case
       if(whcprg.ne.'NLO') then
       	mjets = maxjets
       	call buildjets(mjets,j_kt,j_eta,j_rap,j_phi,j_p,jetvec,
      1     	isForClustering)
       endif
-
-      if(whcprg.ne.'NLO') then
-c Find the b hadrons
-     		bhadfromtop = 0
-      	bhadfromatop = 0
-      	ptbhadfromtop = 0
-      	ptbhadfromatop = 0
-c copied from ttb_NLO_dec
-      	do j=1,nhep
-         	if(IsForClustering(j).and.isbhadron(idhep(j))) then
-            	if(binhadron(idhep(j)).eq.5) then ! is it a b or b~?
-! Look for hardest (largest pt) hadron with a b quark content.
-! Store in bhadfromtop, ptbhadfromtop
-                	if(bhadfromtop.ne.0) then
-c                 	 write(*,*) ' a top with more than one b son'
-                  	call getyetaptmass(phep(1:4,j),y,eta,pt,mass)
-                  	if(pt.gt.ptbhadfromtop) then
-                     	bhadfromtop = j
-                     	ptbhadfromtop = pt
-            	      endif
-               	else
-                  	bhadfromtop = j
-                  	call getyetaptmass(phep(1:4,j),y,eta,pt,mass)
-                  	ptbhadfromtop = pt
-               	endif
-            	elseif(binhadron(idhep(j)).eq.-5) then
-c same for bbar
-      	         if(bhadfromatop.ne.0) then
-c        	          write(*,*) ' a top with more than one b son'
-            	      call getyetaptmass(phep(1:4,j),y,eta,pt,mass)
-               	   if(pt.gt.ptbhadfromatop) then
-                  	   bhadfromatop = j
-                     	ptbhadfromatop = pt
-            	      endif
-               	else
-                  	bhadfromatop = j
-                  	call getyetaptmass(phep(1:4,j),y,eta,pt,mass)
-                  	ptbhadfromatop = pt
-               	endif
-            	endif
-         	endif
-      	enddo
-
-c Figure out which jets came from the b's i.e. which contain b hadrons
-      	i_bjet = in_jet(bhadfromtop,jetvec)
-      	i_abjet = in_jet(bhadfromatop,jetvec)
-      	i_b1=min(i_bjet,i_abjet)
-      	i_b2=max(i_bjet,i_abjet)
-c We will require at least 2 of the 4 hardest jets to be b-jets (as in MC_TTBAR rivet analysis)
-c If this is not the case, we shall skip the event
-      	if(whcprg.eq.'LHE') then
-      		counter=counter+1
-      		if(i_b1.eq.1.and.i_b2.eq.2) then
-      			i_j1=3
-      		elseif(i_b1.eq.1.and.i_b2.eq.3) then
-      			i_j1=2
-      		elseif(i_b1.eq.2.and.i_b2.eq.3) then
-      			i_j1=1
-      		elseif(i_b1.eq.i_b2) then
-      			counter2=counter2+1
-      			write(25,*) 'Both bs clustered into the same jet'
-	      		write(25,*) 'Skipping event:',counter2,'of',counter
-	      		write(25,*)
-	      		return
-	      	endif
-      	else
-      		counter=counter+1
-	      	if(i_bjet.gt.4.or.i_abjet.gt.4) then
-	      		counter2=counter2+1
-	      		write(25,*) 'We have less than two b-jets in our hardest 4 jets'
-	      		write(25,*) 'Skipping event:',counter2,'of',counter
-	      		write(25,*)
-	      		return
-	      	else
-	      		if(i_bjet.eq.i_abjet) then
-	      			counter2=counter2+1
-	      			write(25,*) 'Both bs clustered into the same jet'
-	      			write(25,*) 'Skipping event:',counter2,'of',counter
-	      			write(25,*)
-	      			return
-	      		endif
-	      		if(i_b1.eq.1.and.i_b2.eq.2) then
-	      			i_j1=3
-	      			i_j2=4
-	      		elseif(i_b1.eq.1.and.i_b2.eq.3) then
-	      			i_j1=2
-	      			i_j2=4
-	      		elseif(i_b1.eq.1.and.i_b2.eq.4) then
-	      			i_j1=2
-	      			i_j2=3
-	      		elseif(i_b1.eq.2.and.i_b2.eq.3) then
-	      			i_j1=1
-	      			i_j2=4
-	      		elseif(i_b1.eq.2.and.i_b2.eq.4) then
-	      			i_j1=1
-	      			i_j2=3
-	      		elseif(i_b1.eq.3.and.i_b2.eq.4) then
-	      			i_j1=1
-	      			i_j2=2
-	      		endif
-	      	endif
-	      endif
-      endif
-
-C       counter3=counter3+1
-C  		write(23,*) 'event:', counter3
-C       do ixx=1,20
-C       	if(j_kt(ixx).gt.0) then
-C       		if(i_bjet.eq.ixx) write(23,*) j_kt(ixx),'b jet'
-C       		if(i_abjet.eq.ixx) write(23,*) j_kt(ixx),'b~ jet'
-C       		if(i_bjet.ne.ixx.and.i_abjet.ne.ixx) write(23,*) j_kt(ixx)
-C       	endif
-C       enddo
-C       write(23,*) 'b jet:',i_bjet
-C       write(23,*) 'b~ jet:',i_abjet
-C       write(23,*)
 
 c Declare the momenta that will be used in the analysis
       id1=idhep(1)
@@ -385,25 +214,21 @@ c Declare the momenta that will be used in the analysis
       if(id2.eq.21) id2=0
       p_top=phep(1:4,i_top)
       p_tb=phep(1:4,i_atop)
-C       p_b=phep(1:4,i_bfromtop)
-C       p_bb=phep(1:4,i_abfromatop)
       p_jet=phep(1:4,i_jet)
 
       njets10 = 0.0
       njets25 = 0.0
       njets40 = 0.0
       do j=1,mjets
-      	if(j.ne.i_b1.and.j.ne.i_b2) then ! don't want to count b jets
-         	if(j_kt(j).gt.10) then
-            	njets10 = njets10 + 1.0
-         	endif
-         	if(j_kt(j).gt.25) then
-            	njets25 = njets25 + 1.0
-         	endif
-         	if(j_kt(j).gt.40) then
-            	njets40 = njets40 + 1.0
-         	endif
-         endif
+      	if(j_kt(j).gt.10) then
+         	njets10 = njets10 + 1.0
+      	endif
+      	if(j_kt(j).gt.25) then
+         	njets25 = njets25 + 1.0
+      	endif
+      	if(j_kt(j).gt.40) then
+         	njets40 = njets40 + 1.0
+      	endif
       enddo
 
 c calculate kinematic quantities needed for stretched/unstretched spectra
@@ -431,7 +256,7 @@ c First fill in the pT spectra for the NLO comparison
 		if(whcprg.eq.'NLO') then
 			p_hist(:)=p_jet(:)
 		else
-			p_hist(:)=j_p(:,i_j1)
+			p_hist(:)=j_p(:,1)
 		endif
 
 		call getyetaptmass(p_hist,y,eta,pt,mass)
@@ -467,99 +292,78 @@ c First fill in the pT spectra for the NLO comparison
       		endif
       	endif
 
-C       	do jxx=1,3
-
-      		cond2 = .true.
-
-C       		if(jxx.eq.1) then
-C       			sf2 = '-all-angle'
-C       			cond2 = .true.
-C       		elseif(jxx.eq.2) then
-C       			sf2 = '-coll'
-C       			if(coll.eq.1) then
-C       				cond2 = .true.
-C       			endif
-C       		elseif(jxx.eq.3) then
-C       			sf2 = '-wa'
-C       			if(coll.eq.0) then
-C       				cond2 = .true.
-C       			endif
-C       		endif
-
-      		do kxx=1,3
-
-      			cond3 = .false.
-
-      			if(kxx.eq.1) then
-      				sf3 = '-all-mttb'
-      				cond3 = .true.
-      			elseif(kxx.eq.2) then
-      				sf3 = '-mttb-gt-1TeV'
-      				if(mttbar.gt.1000) then
-      					cond3 = .true.
-      				endif
-      			elseif(kxx.eq.3) then
-      				sf3 = '-mttb-gt-2TeV'
-      				if(mttbar.gt.2000) then
-   	   				cond3 = .true.
-   	   			endif
-      			endif
+     		do kxx=1,3
+     			cond3 = .false.
+     			if(kxx.eq.1) then
+     				sf3 = '-all-mttb'
+     				cond3 = .true.
+     			elseif(kxx.eq.2) then
+     				sf3 = '-mttb-gt-1TeV'
+     				if(mttbar.gt.1000) then
+     					cond3 = .true.
+     				endif
+     			elseif(kxx.eq.3) then
+     				sf3 = '-mttb-gt-2TeV'
+     				if(mttbar.gt.2000) then
+  	   				cond3 = .true.
+  	   			endif
+     			endif
 
 c (1.) Observables of the (i) top, (ii) tt~ system
 c (iii-iv) 1st two hardest non b-jets.
 
-      			do mxx=1,4
-      				cond4 = .false.
-      				if(mxx.eq.1) then
-      					pf1 = 't'
-      					do mu=1,4
-      						p_hist(mu) = p_top(mu)
-      					enddo
+      		do mxx=1,4
+     				cond4 = .false.
+     				if(mxx.eq.1) then
+     					pf1 = 't'
+     					do mu=1,4
+     						p_hist(mu) = p_top(mu)
+     					enddo
+     					cond4 = .true.
+     				elseif(mxx.eq.2) then
+     					pf1 = 'ttb'
+     					do mu=1,4
+     						p_hist(mu) = p_top(mu) + p_tb(mu)
+     					enddo
+     					cond4 = .true.
+     				elseif(mxx.eq.3) then
+     					pf1 = 'j1'
+     					do mu=1,4
+     						if(whcprg.eq.'NLO') then
+     							p_hist(mu) = p_jet(mu)
+     						else
+      						p_hist(mu) = j_p(mu,1)
+      					endif
+      				enddo
+      				call getyetaptmass(p_hist,y,eta,pt,mass)
+      				if(pt.gt.0) then
       					cond4 = .true.
-      				elseif(mxx.eq.2) then
-      					pf1 = 'ttb'
-      					do mu=1,4
-      						p_hist(mu) = p_top(mu) + p_tb(mu)
-      					enddo
+      				endif
+      			elseif(mxx.eq.4) then
+      				pf1 = 'j2'
+      				do mu=1,4
+      					p_hist(mu) = j_p(mu,2)
+      				enddo
+      				call getyetaptmass(p_hist,y,eta,pt,mass)
+      				if(pt.gt.0) then
       					cond4 = .true.
-      				elseif(mxx.eq.3) then
-      					pf1 = 'j1'
-      					do mu=1,4
-      						if(whcprg.eq.'NLO') then
-      							p_hist(mu) = p_jet(mu)
-      						else
-	      						p_hist(mu) = j_p(mu,i_j1)
-	      					endif
-	      				enddo
-	      				call getyetaptmass(p_hist,y,eta,pt,mass)
-	      				if(pt.gt.0) then
-	      					cond4 = .true.
-	      				endif
-	      			elseif(mxx.eq.4) then
-	      				pf1 = 'j2'
-	      				do mu=1,4
-	      					p_hist(mu) = j_p(mu,i_j2)
-	      				enddo
-	      				call getyetaptmass(p_hist,y,eta,pt,mass)
-	      				if(pt.gt.0) then
-	      					cond4 = .true.
-	      				endif
-	      			endif
+      				endif
+      			endif
 
-						ls1=lenocc(sf1)
-						ls3=lenocc(sf3)
-						lp1=lenocc(pf1)
+					ls1=lenocc(sf1)
+					ls3=lenocc(sf3)
+					lp1=lenocc(pf1)
 
-						if(cond1.and.cond2.and.cond3.and.cond4) then
-							call getyetaptmass(p_hist,y,eta,pt,mass)
-							if(mxx.eq.2) then
-								call filld(pf1(1:lp1)//'_m'//sf1(1:ls1)//sf3(1:ls3),mass,dsig)
-							endif
-							call filld(pf1(1:lp1)//'_y'//sf1(1:ls1)//sf3(1:ls3),y,dsig)
-				         call filld(pf1(1:lp1)//'_eta'//sf1(1:ls1)//sf3(1:ls3),eta,dsig)
-		 	   	      call filld(pf1(1:lp1)//'_pt_2GeV'//sf1(1:ls1)//sf3(1:ls3),pt,dsig)
-		 	   	      if(mxx.eq.3) then
-		 	   	      	call filld(pf1(1:lp1)//'_pt_10GeV'//sf1(1:ls1)//sf3(1:ls3),pt,dsig)
+					if(cond1.and.cond3.and.cond4) then
+						call getyetaptmass(p_hist,y,eta,pt,mass)
+						if(mxx.eq.2) then
+							call filld(pf1(1:lp1)//'_m'//sf1(1:ls1)//sf3(1:ls3),mass,dsig)
+						endif
+						call filld(pf1(1:lp1)//'_y'//sf1(1:ls1)//sf3(1:ls3),y,dsig)
+			         call filld(pf1(1:lp1)//'_eta'//sf1(1:ls1)//sf3(1:ls3),eta,dsig)
+	 	   	      call filld(pf1(1:lp1)//'_pt_2GeV'//sf1(1:ls1)//sf3(1:ls3),pt,dsig)
+	 	   	      if(mxx.eq.3) then
+	 	   	      	call filld(pf1(1:lp1)//'_pt_10GeV'//sf1(1:ls1)//sf3(1:ls3),pt,dsig)
 C c (1.a) Gap fraction
 C 								binsize=5d0
 C 								nbins=100
@@ -570,68 +374,17 @@ C 										call filld('gap-fraction-5GeV'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),b
 C 									endif
 C 								enddo		
 c		 	   	      	call filld(pf1(1:lp1)//'_pt_50GeV'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),pt,dsig)
-		 	   	      endif
 		 	   	   endif
-		 	   	enddo
+		 	   	endif
+		 	   enddo
 
-c (2.) Rapidities in the y_ttbar=0 frame
-		 	   	if(cond1.and.cond2.and.cond3) then
-!		 	   		call filld('yj1_minus_yttb'//sf1(1:ls1)//sf3(1:ls3),j_rap(i_j1)-yttbar,dsig)
-!		 	   		call filld('yj2_minus_yttb'//sf1(1:ls1)//sf3(1:ls3),j_rap(i_j2)-yttbar,dsig)
-
+		 	   if(cond1.and.cond3) then
 c (3.) N additional jets
-		 	   		call filld('Njets_10GeV'//sf1(1:ls1)//sf3(1:ls3),njets10,dsig)
-      				call filld('Njets_25GeV'//sf1(1:ls1)//sf3(1:ls3),njets25,dsig)
-      				call filld('Njets_40GeV'//sf1(1:ls1)//sf3(1:ls3),njets40,dsig)
-
-c (4.) distances between jets
-
-c between the two light jets
-!      				call getdydetadphidr(j_p(:,i_j1),j_p(:,i_j2),dy,deta,dphi,dr)
-!      				call filld('dR_j1_j2'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),dr,dsig)
-!      				call filld('deta_j1_j2'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),deta,dsig)
-!      				call filld('dphi_j1_j2'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),dphi,dsig)
-!c between the two b jets
-!      				call getdydetadphidr(j_p(:,i_b1),j_p(:,i_b2),dy,deta,dphi,dr)
-!      				call filld('dR_b1_b2'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),dr,dsig)
-!      				call filld('deta_b1_b2'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),deta,dsig)
-!      				call filld('dphi_b1_b2'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),dphi,dsig)
-! between the b1 and j1
-!      				call getdydetadphidr(j_p(:,i_b1),j_p(:,i_j1),dy,deta,dphi,dr)
-!      				call filld('dR_b1_j1'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),dr,dsig)
-!      				call filld('deta_b1_j1'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),deta,dsig)
-!      				call filld('dphi_b1_j1'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),dphi,dsig)   
-! between the b1 and j2
-!      				call getdydetadphidr(j_p(:,i_b1),j_p(:,i_j2),dy,deta,dphi,dr)
-!      				call filld('dR_b1_j2'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),dr,dsig)
-!      				call filld('deta_b1_j2'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),deta,dsig)
-!      				call filld('dphi_b1_j2'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),dphi,dsig)      			
-
-c (5.) New observable that we have imagined
-C       				if(rho.eq.1.or.rho.eq.2) then ! only look at gg terms
-C       					if(abs(deltay).lt.0.1) then ! selects terms where Bfact ~ 0.5 i.e. the two matrix elements are roughly equal magnitudes
-C 		      				if(( j_rap(i_j1) - y_t ).lt.0) then ! look in the lefthand hemisphere only
-C 		      				call getdydetadphidr(j_p(:,i_j1),p_top,dy,deta,dphi,dr)
-C       							if(j_kt(i_j1).gt.10) then ! make a pT cut on the jet
-C !	      							call filld('jet_pull-R'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),dr,dsig)
-C !			      					call filld('jet_pull-eta'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),deta,dsig)
-C 	      							call filld('jet_pull'//sf1(1:ls1)//sf3(1:ls3)//'-10',dphi,dsig)
-C 	      						elseif(j_kt(i_j1).gt.25) then
-C 	      							call filld('jet_pull'//sf1(1:ls1)//sf3(1:ls3)//'-25',dphi,dsig)
-C 	      						elseif(j_kt(i_j1).gt.40) then
-C 	      							call filld('jet_pull'//sf1(1:ls1)//sf3(1:ls3)//'-40',dphi,dsig)
-C 	      						endif
-C 	      					endif
-C 	      				endif
-C 	      			endif
-
-c (6.) Total transverse momentum
-						ptjH = j_kt(1)+j_kt(2)+j_kt(3)+j_kt(4) ! the sum of the 4 hardest jets kT
-	      			call filld('j-Ht'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),ptjH,dsig)
-
-	      		endif
-	      	enddo
-C 	      enddo
+	 	   		call filld('Njets_10GeV'//sf1(1:ls1)//sf3(1:ls3),njets10,dsig)
+     				call filld('Njets_25GeV'//sf1(1:ls1)//sf3(1:ls3),njets25,dsig)
+     				call filld('Njets_40GeV'//sf1(1:ls1)//sf3(1:ls3),njets40,dsig)
+     			endif
+     		enddo
 	   enddo
 		end
 

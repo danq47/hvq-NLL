@@ -101,6 +101,9 @@ extern "C" {
     if(cpy8tune_.nohad == 1) {
       pythia.readString("HadronLevel:All = off");
     }
+    pythia.readString("HadronLevel:All = off");
+    pythia.readString("6:mayDecay = off");
+    pythia.readString("-6:mayDecay = off");
 
     pythia.readString("111:mayDecay = off"); 
     pythia.readString("521:mayDecay = off"); 
