@@ -20,37 +20,33 @@ c Initialise histograms
 			if(i.eq.2) s1 = '-str'
 C 			if(i.eq.3) s1 = '-unstr'
 
-				do k=1,3
+				do k=1,1
 					if(k.eq.1) s3 = '-all-mttb'
-					if(k.eq.2) s3 = '-mttb-gt-1TeV'
- 					if(k.eq.3) s3 = '-mttb-gt-2TeV'
+C 					if(k.eq.2) s3 = '-mttb-gt-1TeV'
+C  					if(k.eq.3) s3 = '-mttb-gt-2TeV'
 
 c (1.) Observables of the (i) top, (ii) t~, (iii) tt~ system
 c (iv-vii) 1-4th hardest jets.
 
-					do m=1,4
+					do m=1,3
 						if(m.eq.1) p1 = 't'
 						if(m.eq.2) p1 = 'ttb'
 						if(m.eq.3) p1 = 'j1'
-						if(m.eq.4) p1 = 'j2'
+C 						if(m.eq.4) p1 = 'j2'
 
 						ls1=lenocc(s1)
 						ls3=lenocc(s3)
 						lp1=lenocc(p1)
 
 						if(m.eq.2) then
-							call bookupeqbins(p1(1:lp1)//'_m'//s1(1:ls1)//s3(1:ls3),20d0,100d0,3100d0)
+							call bookupeqbins(p1(1:lp1)//'_m'//s1(1:ls1)//s3(1:ls3),1d0,0d0,200d0)
 						endif
 						call bookupeqbins(p1(1:lp1)//'_y'//s1(1:ls1)//s3(1:ls3),0.32d0,-8d0,8d0)
 						call bookupeqbins(p1(1:lp1)//'_eta'//s1(1:ls1)//s3(1:ls3),0.32d0,-8d0,8d0)
 ! different ranges on the pt spectra
-						if(m.le.3) then
-							call bookupeqbins(p1(1:lp1)//'_pt_2GeV'//s1(1:ls1)//s3(1:ls3),2d0,0d0,600d0)
-						else
-							call bookupeqbins(p1(1:lp1)//'_pt_2GeV'//s1(1:ls1)//s3(1:ls3),2d0,0d0,100d0)
-						endif
+						call bookupeqbins(p1(1:lp1)//'_pt_2GeV'//s1(1:ls1)//s3(1:ls3),2d0,0d0,150d0)
 						if(m.eq.3) then
-							call bookupeqbins(p1(1:lp1)//'_pt_10GeV'//s1(1:ls1)//s3(1:ls3),10d0,0d0,1000d0)
+c							call bookupeqbins(p1(1:lp1)//'_pt_10GeV'//s1(1:ls1)//s3(1:ls3),10d0,0d0,200d0)
 c							call bookupeqbins(p1(1:lp1)//'_pt_50GeV'//s1(1:ls1)//s3(1:ls3),50d0,0d0,2000d0)
 						endif
 					enddo
@@ -69,14 +65,14 @@ c					call bookupeqbins('gap-fraction-10GeV'//s1(1:ls1)//s2(1:ls2)//s3(1:ls3),10
 
 ! for comparison with NLO plots
 
-	   call bookupeqbins('j1_pt_2GeV-total',2d0,0d0,500d0)
-	   call bookupeqbins('j1_pt_10GeV-total',10d0,0d0,1000d0)
-	   call bookupeqbins('j1_pt_2GeV-gg',2d0,0d0,500d0)
-	   call bookupeqbins('j1_pt_10GeV-gg',10d0,0d0,1000d0)
-	   call bookupeqbins('j1_pt_2GeV-gg-str',2d0,0d0,500d0)
-	   call bookupeqbins('j1_pt_10GeV-gg-str',10d0,0d0,1000d0)
-	   call bookupeqbins('j1_pt_2GeV-gg-unstr',2d0,0d0,500d0)
-	   call bookupeqbins('j1_pt_10GeV-gg-unstr',10d0,0d0,1000d0)
+	   call bookupeqbins('j1_pt_2GeV-total',2d0,0d0,150d0)
+!	   call bookupeqbins('j1_pt_10GeV-total',10d0,0d0,200d0)
+	   call bookupeqbins('j1_pt_2GeV-gg',2d0,0d0,150d0)
+!	   call bookupeqbins('j1_pt_10GeV-gg',10d0,0d0,200d0)
+	   call bookupeqbins('j1_pt_2GeV-gg-str',2d0,0d0,150d0)
+!	   call bookupeqbins('j1_pt_10GeV-gg-str',10d0,0d0,200d0)
+	   call bookupeqbins('j1_pt_2GeV-gg-unstr',2d0,0d0,150d0)
+!	   call bookupeqbins('j1_pt_10GeV-gg-unstr',10d0,0d0,200d0)
 
 		end
 
@@ -172,42 +168,9 @@ C - KH - 17/8/16 - added block from here ...
 C - KH - 17/8/16 - down to here ; copied from DYNNLOPS's pwhg_analysis-minlo.f
 
 c Initialise all numbers as 0
-		i_top=0
-		i_atop=0
-		i_jet=0
-		IsForClustering=.false.
-
-		do jhep=1,nhep
-			id=idhep(jhep)
-C 			if(idhep(jhep).eq.6) i_top = jhep 		! find t
-C 			if(idhep(jhep).eq.-6) i_atop = jhep 	! and t~
-			i_top = 3
-			i_atop = 4
-			id=abs(id)
-! Select jets in the NLO case so that we don't use Fastjet
-C          if(whcprg.eq.'NLO') then
-C             if(jhep.gt.2) then ! If it's a final state parton
-C                if(abs(idhep(jhep)).lt.6.or.idhep(jhep).eq.21) then
-C                   i_jet = jhep
-C                endif
-C             endif
-C          else
-C          	i_jet = 0
-C          endif
-c for jets, using only final state particles excluding leptons
-         if(isthep(jhep).eq.1.and.(id.lt.11.or.id.gt.16).and.jhep.ne.3.and.jhep.ne.4) then
-            IsForClustering(jhep) = .true.
-         else
-            IsForClustering(jhep) = .false.
-         endif
-      enddo
-
-c Call Fastjet to build jets for LHEF and PYTHIA case
-      if(whcprg.ne.'NLO') then
-      	mjets = maxjets
-      	call buildjets(mjets,j_kt,j_eta,j_rap,j_phi,j_p,jetvec,
-     1     	isForClustering)
-      endif
+		i_top=3
+		i_atop=4
+		i_jet=5
 
 c Declare the momenta that will be used in the analysis
       id1=idhep(1)
@@ -254,27 +217,21 @@ c Decide whether the event is a stretched or unstretched configuration
 c Fill histograms - make the cuts
 
 c First fill in the pT spectra for the NLO comparison
-
-		if(whcprg.eq.'NLO') then
-			p_hist(:)=p_jet(:)
-		else
-			p_hist(:)=j_p(:,1)
-		endif
-
+      p_hist=p_jet
 		call getyetaptmass(p_hist,y,eta,pt,mass)
 
 		if(pt.gt.0) then
 			call filld('j1_pt_2GeV-total',pt,dsig)
-			call filld('j1_pt_10GeV-total',pt,dsig)
+!			call filld('j1_pt_10GeV-total',pt,dsig)
 			if(rho.eq.1.or.rho.eq.2) then
 				call filld('j1_pt_2GeV-gg',pt,dsig)
-				call filld('j1_pt_10GeV-gg',pt,dsig)
+!				call filld('j1_pt_10GeV-gg',pt,dsig)
 				if(str) then
 					call filld('j1_pt_2GeV-gg-str',pt,dsig)
-					call filld('j1_pt_10GeV-gg-str',pt,dsig)
+!					call filld('j1_pt_10GeV-gg-str',pt,dsig)
 				elseif(unstr) then
 					call filld('j1_pt_2GeV-gg-unstr',pt,dsig)
-					call filld('j1_pt_10GeV-gg-unstr',pt,dsig)
+!					call filld('j1_pt_10GeV-gg-unstr',pt,dsig)
 				endif
 			endif
 		endif
@@ -294,27 +251,27 @@ c First fill in the pT spectra for the NLO comparison
       		endif
       	endif
 
-     		do kxx=1,3
+     		do kxx=1,1
      			cond3 = .false.
      			if(kxx.eq.1) then
      				sf3 = '-all-mttb'
      				cond3 = .true.
-     			elseif(kxx.eq.2) then
-     				sf3 = '-mttb-gt-1TeV'
-     				if(mttbar.gt.1000) then
-     					cond3 = .true.
-     				endif
-     			elseif(kxx.eq.3) then
-     				sf3 = '-mttb-gt-2TeV'
-     				if(mttbar.gt.2000) then
-  	   				cond3 = .true.
-  	   			endif
+C      			elseif(kxx.eq.2) then
+C      				sf3 = '-mttb-gt-1TeV'
+C      				if(mttbar.gt.1000) then
+C      					cond3 = .true.
+C      				endif
+C      			elseif(kxx.eq.3) then
+C      				sf3 = '-mttb-gt-2TeV'
+C      				if(mttbar.gt.2000) then
+C   	   				cond3 = .true.
+C   	   			endif
      			endif
 
 c (1.) Observables of the (i) top, (ii) tt~ system
 c (iii-iv) 1st two hardest non b-jets.
 
-      		do mxx=1,4
+      		do mxx=1,3
      				cond4 = .false.
      				if(mxx.eq.1) then
      					pf1 = 't'
@@ -331,20 +288,7 @@ c (iii-iv) 1st two hardest non b-jets.
      				elseif(mxx.eq.3) then
      					pf1 = 'j1'
      					do mu=1,4
-     						if(whcprg.eq.'NLO') then
-     							p_hist(mu) = p_jet(mu)
-     						else
-      						p_hist(mu) = j_p(mu,1)
-      					endif
-      				enddo
-      				call getyetaptmass(p_hist,y,eta,pt,mass)
-      				if(pt.gt.0) then
-      					cond4 = .true.
-      				endif
-      			elseif(mxx.eq.4) then
-      				pf1 = 'j2'
-      				do mu=1,4
-      					p_hist(mu) = j_p(mu,2)
+     						p_hist(mu) = p_jet(mu)
       				enddo
       				call getyetaptmass(p_hist,y,eta,pt,mass)
       				if(pt.gt.0) then
@@ -364,8 +308,8 @@ c (iii-iv) 1st two hardest non b-jets.
 						call filld(pf1(1:lp1)//'_y'//sf1(1:ls1)//sf3(1:ls3),y,dsig)
 			         call filld(pf1(1:lp1)//'_eta'//sf1(1:ls1)//sf3(1:ls3),eta,dsig)
 	 	   	      call filld(pf1(1:lp1)//'_pt_2GeV'//sf1(1:ls1)//sf3(1:ls3),pt,dsig)
-	 	   	      if(mxx.eq.3) then
-	 	   	      	call filld(pf1(1:lp1)//'_pt_10GeV'//sf1(1:ls1)//sf3(1:ls3),pt,dsig)
+!	 	   	      if(mxx.eq.3) then
+!	 	   	      	call filld(pf1(1:lp1)//'_pt_10GeV'//sf1(1:ls1)//sf3(1:ls3),pt,dsig)
 C c (1.a) Gap fraction
 C 								binsize=5d0
 C 								nbins=100
@@ -376,7 +320,7 @@ C 										call filld('gap-fraction-5GeV'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),b
 C 									endif
 C 								enddo		
 c		 	   	      	call filld(pf1(1:lp1)//'_pt_50GeV'//sf1(1:ls1)//sf2(1:ls2)//sf3(1:ls3),pt,dsig)
-		 	   	   endif
+!		 	   	   endif
 		 	   	endif
 		 	   enddo
 
